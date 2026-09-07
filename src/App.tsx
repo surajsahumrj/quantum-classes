@@ -16,7 +16,7 @@ const courses: Batch[] = [
 const batchFilters = ['All batches', 'KG–5th', '6th–8th', '9th', '10th']
 const navItems = [['Courses', '/courses'], ['Faculty', '/faculty'], ['Results', '/results'], ['Fees', '/fees'], ['Study material', '/study-material'], ['About', '/about']]
 
-function Brand() { return <Link className="brand" to="/" aria-label="Quantum Classes home"><span className="brand-mark"><span>Q</span><i /></span><span><strong>QUANTUM</strong><small>CLASSES</small></span></Link> }
+function Brand() { return <Link className="brand" to="/" aria-label="Quantum Classes home"><img className="brand-logo" src="/logo.jpg" alt="Quantum Classes logo" /><strong className="brand-name">QUANTUM CLASSES</strong></Link> }
 function Header() {
   const [open, setOpen] = useState(false)
   const location = useLocation()
