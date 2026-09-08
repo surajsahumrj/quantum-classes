@@ -102,6 +102,7 @@ const batchFilters = [
   "10th",
 ];
 const navItems = [
+  ["Home", "/"],
   ["Courses", "/courses"],
   ["Fees", "/fees"],
   ["Study Material", "/study-material"],
