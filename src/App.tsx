@@ -136,8 +136,14 @@ function Brand() {
 }
 function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   useEffect(() => setOpen(false), [location.pathname]);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   return (
     <>
       <div className="announcement">
@@ -146,7 +152,7 @@ function Header() {
           Book a free counselling call <ArrowRight size={14} />
         </Link>
       </div>
-      <header className="site-header">
+      <header className={scrolled ? 'site-header header-scrolled' : 'site-header'}>
         <Brand />
         <button
           className="menu-toggle"
@@ -156,14 +162,14 @@ function Header() {
           {open ? <X /> : <Menu />}
         </button>
         <nav
-          className={open ? "main-nav open" : "main-nav"}
+          className={open ? 'main-nav open' : 'main-nav'}
           aria-label="Main navigation"
         >
           {navItems.map(([label, path]) => (
             <NavLink
               key={path}
               to={path}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
             >
               {label}
             </NavLink>
@@ -311,13 +317,77 @@ function EnquiryCTA() {
     </section>
   );
 }
+function AnimationSystem() {
+  const location = useLocation();
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('anim-visible');
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
+    );
+
+    const timer = setTimeout(() => {
+      // Block-level content — fade+slide in as a unit
+      const blocks = [
+        '.section-intro', '.fee-table-wrap', '.fee-benefits',
+        '.about-copy', '.about-image', '.resource-library',
+        '.compact-cta', '.contact-details', '.map-placeholder',
+        '.form-card', '.enquire-copy', '.sm-layout', '.moments-header',
+        '.gallery-state', '.pricing-table', '.mission-grid > div',
+      ];
+      blocks.forEach((sel) =>
+        document.querySelectorAll<HTMLElement>(sel).forEach((el) => {
+          if (!el.classList.contains('anim-ready')) {
+            el.classList.add('anim-ready');
+            io.observe(el);
+          }
+        }),
+      );
+
+      // Card grids — children get staggered delays
+      const cardGrids = [
+        '.course-grid', '.teaser-cards',
+        '.infra-grid', '.social-feed-grid',
+      ];
+      cardGrids.forEach((sel) =>
+        document.querySelectorAll<HTMLElement>(sel).forEach((grid) =>
+          Array.from(grid.children as HTMLCollectionOf<HTMLElement>).forEach((child, i) => {
+            if (!child.classList.contains('anim-ready')) {
+              child.classList.add('anim-ready');
+              child.style.transitionDelay = `${Math.min(i * 80, 400)}ms`;
+              io.observe(child);
+            }
+          }),
+        ),
+      );
+    }, 80);
+
+    return () => {
+      io.disconnect();
+      clearTimeout(timer);
+    };
+  }, [location.pathname]);
+
+  return null;
+}
 function Layout({ children }: { children: ReactNode }) {
+  const location = useLocation();
   return (
     <div className="site-shell">
       <Header />
-      <main>{children}</main>
+      <main key={location.pathname} className="page-main">
+        {children}
+      </main>
       <Footer />
       <WhatsApp />
+      <AnimationSystem />
     </div>
   );
 }
@@ -326,7 +396,12 @@ function Stats({ compact = false }: { compact?: boolean }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => setVisible(entry.isIntersecting),
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
       { threshold: 0.25 },
     );
     if (ref.current) observer.observe(ref.current);
@@ -334,20 +409,20 @@ function Stats({ compact = false }: { compact?: boolean }) {
   }, []);
   return (
     <section
-      className={compact ? "stats-strip compact" : "stats-strip"}
+      className={`${compact ? 'stats-strip compact' : 'stats-strip'}${visible ? ' stats-visible' : ''}`}
       ref={ref}
       aria-label="Quantum Classes statistics"
     >
       {[
-        ["50+", "students taught"],
-        ["8+", "top exam selections"],
-        ["1+", "years of excellence"],
-        ["40%", "average improvement"],
+        ['50+', 'students taught'],
+        ['8+', 'top exam selections'],
+        ['1+', 'years of excellence'],
+        ['40%', 'average improvement'],
       ].map(([n, label], i) => (
         <div className="stat" key={label}>
-          <strong>{visible ? n : "0"}</strong>
+          <strong>{n}</strong>
           <span>{label}</span>
-          <i>{i < 3 ? "↗" : "↑"}</i>
+          <i>{i < 3 ? '↗' : '↑'}</i>
         </div>
       ))}
     </section>

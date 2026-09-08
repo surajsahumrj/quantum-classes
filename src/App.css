@@ -2697,3 +2697,157 @@ footer {
         justify-content: center
     }
 }
+/* ==========================================================================
+   ANIMATION SYSTEM
+   GPU-friendly, prefers-reduced-motion aware, scroll-reveal + interactions
+   ========================================================================== */
+
+/* 1. Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* 2. Prefers-reduced-motion: collapse all non-essential animation */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Keep hero content visible if motion disabled */
+  .hero-copy > *,
+  .hero-visual,
+  .page-hero .breadcrumbs,
+  .page-hero .kicker,
+  .page-hero h1,
+  .page-hero > p {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* 3. Scroll-reveal base classes (applied by AnimationSystem JS) */
+.anim-ready {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  will-change: opacity, transform;
+}
+.anim-ready.anim-visible {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto;
+}
+
+/* 4. Homepage hero entrance — CSS-only, no JS needed */
+@keyframes h-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.hero-copy > * {
+  opacity: 0;
+  animation: h-in 0.65s ease forwards;
+}
+.hero-copy > *:nth-child(1) { animation-delay: 0.08s; }
+.hero-copy > *:nth-child(2) { animation-delay: 0.20s; }
+.hero-copy > *:nth-child(3) { animation-delay: 0.32s; }
+.hero-copy > *:nth-child(4) { animation-delay: 0.44s; }
+.hero-copy > *:nth-child(5) { animation-delay: 0.56s; }
+.hero-visual {
+  opacity: 0;
+  animation: h-in 0.70s 0.22s ease forwards;
+}
+
+/* 5. Inner-page hero entrance (PageHero component) */
+.page-hero .breadcrumbs { opacity: 0; animation: h-in 0.45s 0.05s ease forwards; }
+.page-hero .kicker      { opacity: 0; animation: h-in 0.45s 0.14s ease forwards; }
+.page-hero h1           { opacity: 0; animation: h-in 0.55s 0.22s ease forwards; }
+.page-hero > p          { opacity: 0; animation: h-in 0.50s 0.32s ease forwards; }
+
+/* 6. Page route transition (key change remounts <main>) */
+.page-main {
+  animation: page-in 0.22s ease both;
+}
+@keyframes page-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* 7. Navbar scroll shadow */
+.site-header { transition: box-shadow 0.30s ease; }
+.header-scrolled { box-shadow: 0 4px 22px rgba(11, 79, 85, 0.10) !important; }
+
+/* 8. Stats strip — stagger reveal */
+.stats-strip .stat {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.stats-strip.stats-visible .stat              { opacity: 1; transform: translateY(0); }
+.stats-strip.stats-visible .stat:nth-child(1) { transition-delay: 0.00s; }
+.stats-strip.stats-visible .stat:nth-child(2) { transition-delay: 0.10s; }
+.stats-strip.stats-visible .stat:nth-child(3) { transition-delay: 0.20s; }
+.stats-strip.stats-visible .stat:nth-child(4) { transition-delay: 0.30s; }
+
+/* 9. Button enhancements */
+.button { transition: transform 0.20s ease, background 0.20s ease, box-shadow 0.20s ease; }
+.button:hover { box-shadow: 0 6px 20px rgba(11, 79, 85, 0.13); }
+.button:active {
+  transform: translateY(1px) scale(0.97) !important;
+  box-shadow: none !important;
+  transition-duration: 0.05s !important;
+}
+.button-text:hover,
+.button-text:active { box-shadow: none !important; }
+
+/* 10. Card hover depth */
+.course-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.course-card:hover { box-shadow: 0 14px 38px rgba(11, 79, 85, 0.12); }
+.teaser-card { transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease; }
+.teaser-card:hover { box-shadow: 0 12px 34px rgba(11, 79, 85, 0.13); }
+.social-feed-grid > a { transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease; }
+.social-feed-grid > a:hover { box-shadow: 0 10px 28px rgba(11, 79, 85, 0.12); }
+.infra-grid > div { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.infra-grid > div:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(11, 79, 85, 0.10); }
+
+/* 11. Gallery tile — CSS animation on mount (re-triggers on category change) */
+@keyframes tile-in {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0);       }
+}
+.gallery-tile { animation: tile-in 0.35s ease both; }
+.gallery-tile:nth-child(1)  { animation-delay: 0.02s; }
+.gallery-tile:nth-child(2)  { animation-delay: 0.06s; }
+.gallery-tile:nth-child(3)  { animation-delay: 0.10s; }
+.gallery-tile:nth-child(4)  { animation-delay: 0.14s; }
+.gallery-tile:nth-child(5)  { animation-delay: 0.18s; }
+.gallery-tile:nth-child(6)  { animation-delay: 0.22s; }
+.gallery-tile:nth-child(7)  { animation-delay: 0.26s; }
+.gallery-tile:nth-child(8)  { animation-delay: 0.30s; }
+.gallery-tile:nth-child(9)  { animation-delay: 0.34s; }
+
+/* 12. Study-material card — CSS animation on mount (re-triggers on subject change) */
+.sm-card { animation: tile-in 0.30s ease both; }
+.sm-card:nth-child(1) { animation-delay: 0.03s; }
+.sm-card:nth-child(2) { animation-delay: 0.08s; }
+.sm-card:nth-child(3) { animation-delay: 0.13s; }
+.sm-card:nth-child(4) { animation-delay: 0.18s; }
+.sm-card:nth-child(5) { animation-delay: 0.23s; }
+.sm-card:nth-child(6) { animation-delay: 0.28s; }
+
+/* 13. Filter-tab transitions */
+.filter { transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease; }
+
+/* 14. WhatsApp float pulse */
+@keyframes wa-pulse {
+  0%, 100% { box-shadow: 0 7px 18px rgba(37, 211, 102, 0.25); }
+  55%       { box-shadow: 0 9px 30px rgba(37, 211, 102, 0.42); }
+}
+.whatsapp { animation: wa-pulse 2.6s ease-in-out infinite; }
+.whatsapp:hover { animation: none; transform: scale(1.08); }
+
+/* 15. Mobile — simplify where needed */
+@media (max-width: 700px) {
+  .gallery-tile { animation-duration: 0.25s; }
+  .sm-card      { animation-duration: 0.22s; }
+}
