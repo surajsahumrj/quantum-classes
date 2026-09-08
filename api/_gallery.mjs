@@ -5,6 +5,15 @@ const imageMimeTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/
 const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'])
 let galleryCache = { expiresAt: 0, data: null }
 
+const mimeFromExtension = {
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.heic': 'image/heic',
+  '.heif': 'image/heif',
+}
+
 function requiredEnv(name) {
   const value = process.env[name]
   if (!value) throw new Error(`Missing ${name}`)
@@ -23,6 +32,16 @@ function getDriveClient() {
 function isSupportedImage(file) {
   const extension = file.name ? file.name.slice(file.name.lastIndexOf('.')).toLowerCase() : ''
   return imageMimeTypes.has(file.mimeType) || imageExtensions.has(extension)
+}
+
+function resolvedMimeType(file) {
+  if (file.mimeType && imageMimeTypes.has(file.mimeType)) return file.mimeType
+  const extension = file.name ? file.name.slice(file.name.lastIndexOf('.')).toLowerCase() : ''
+  return mimeFromExtension[extension] || 'image/jpeg'
+}
+
+function isHeic(mimeType) {
+  return mimeType === 'image/heic' || mimeType === 'image/heif'
 }
 
 async function listAllFiles(drive, query, fields) {
@@ -73,30 +92,99 @@ export async function getGallery() {
 }
 
 export async function streamImage(fileId, response, preview = false) {
-  const { auth, drive } = getDriveClient()
-  const metadata = await drive.files.get({ fileId, fields: 'mimeType,name,thumbnailLink' })
-  if (!isSupportedImage(metadata.data)) {
+  // --- Safe logging: never log credentials or tokens ---
+  console.log(`[gallery/image] fileId=${fileId} preview=${preview}`)
+
+  const { drive } = getDriveClient()
+
+  // Fetch metadata to determine MIME type
+  let metadata
+  try {
+    metadata = await drive.files.get({
+      fileId,
+      fields: 'mimeType,name,thumbnailLink',
+      supportsAllDrives: true,
+    })
+    console.log(`[gallery/image] metadata ok — name=${metadata.data.name} mimeType=${metadata.data.mimeType}`)
+  } catch (err) {
+    console.error(`[gallery/image] metadata request failed: ${err.message}`)
     response.status(404).end()
     return
   }
+
+  if (!isSupportedImage(metadata.data)) {
+    console.log(`[gallery/image] unsupported format — rejecting`)
+    response.status(404).end()
+    return
+  }
+
+  const detectedMime = resolvedMimeType(metadata.data)
+  console.log(`[gallery/image] detectedMime=${detectedMime}`)
+
   let body
-  let contentType = metadata.data.mimeType
-  if (metadata.data.mimeType === 'image/heic' || metadata.data.mimeType === 'image/heif' || preview) {
-    if (!metadata.data.thumbnailLink) {
+  let contentType
+
+  if (isHeic(detectedMime) || preview) {
+    // --- HEIC / HEIF: use Google's thumbnail URL (public, no auth needed) ---
+    const thumbnailLink = metadata.data.thumbnailLink
+    if (!thumbnailLink) {
+      console.error(`[gallery/image] no thumbnailLink available for HEIC file`)
       response.status(404).end()
       return
     }
-    const thumbnailUrl = preview ? metadata.data.thumbnailLink.replace(/=s\d+$/, '=s1600') : metadata.data.thumbnailLink
-    const thumbnail = await fetch(thumbnailUrl, { headers: await auth.getRequestHeaders() })
-    if (!thumbnail.ok) throw new Error(`Drive thumbnail request failed: ${thumbnail.status}`)
-    body = Buffer.from(await thumbnail.arrayBuffer())
-    contentType = thumbnail.headers.get('content-type') || 'image/jpeg'
+    // Scale up thumbnail quality for full view, keep smaller for grid
+    const thumbnailUrl = preview
+      ? thumbnailLink.replace(/=s\d+$/, '=s1600')
+      : thumbnailLink.replace(/=s\d+$/, '=s800')
+
+    // NOTE: thumbnailLink is a pre-signed Google URL — do NOT send auth headers
+    let thumbnailRes
+    try {
+      thumbnailRes = await fetch(thumbnailUrl)
+    } catch (err) {
+      console.error(`[gallery/image] thumbnail fetch failed: ${err.message}`)
+      response.status(502).end()
+      return
+    }
+
+    if (!thumbnailRes.ok) {
+      console.error(`[gallery/image] thumbnail fetch status=${thumbnailRes.status}`)
+      response.status(502).end()
+      return
+    }
+
+    body = Buffer.from(await thumbnailRes.arrayBuffer())
+    contentType = thumbnailRes.headers.get('content-type') || 'image/jpeg'
+    console.log(`[gallery/image] thumbnail ok — contentType=${contentType} bytes=${body.length}`)
   } else {
-    const file = await drive.files.get({ fileId, alt: 'media' }, { responseType: 'arraybuffer' })
-    body = Buffer.from(file.data)
+    // --- JPG / PNG / WEBP: download raw binary via Drive API ---
+    let streamRes
+    try {
+      streamRes = await drive.files.get(
+        { fileId, alt: 'media', supportsAllDrives: true },
+        { responseType: 'stream' },
+      )
+    } catch (err) {
+      console.error(`[gallery/image] Drive download failed: ${err.message}`)
+      response.status(502).end()
+      return
+    }
+
+    // Collect stream chunks into a Buffer — required for Vercel serverless
+    body = await new Promise((resolve, reject) => {
+      const chunks = []
+      streamRes.data.on('data', (chunk) => chunks.push(Buffer.from(chunk)))
+      streamRes.data.on('end', () => resolve(Buffer.concat(chunks)))
+      streamRes.data.on('error', reject)
+    })
+
+    contentType = detectedMime
+    console.log(`[gallery/image] download ok — contentType=${contentType} bytes=${body.length}`)
   }
+
   response.setHeader('Cache-Control', 'public, max-age=900, stale-while-revalidate=3600')
   response.setHeader('Content-Type', contentType)
   response.setHeader('Content-Length', body.length)
+  console.log(`[gallery/image] responding 200 Content-Type=${contentType}`)
   response.status(200).send(body)
 }
