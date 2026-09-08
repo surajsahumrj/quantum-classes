@@ -57,7 +57,86 @@ function Stats({ compact = false }: { compact?: boolean }) { const ref = useRef<
 function CourseCard({ course, detailed = false, index = 0 }: { course: Batch; detailed?: boolean; index?: number }) { return <article className={`course-card ${course.color} ${detailed ? 'detailed' : ''}`}><div className="course-top"><span>0{index + 1}</span><span className="course-tag">{course.tag}</span></div><div><h3>{course.name}</h3><p>{course.level}</p><small className="course-detail">{course.detail}</small></div><div className="batch-timings">{course.timings.map((timing) => <div className="batch-timing" key={`${timing.label ?? course.name}-${timing.time}`}><span className="timing-copy">{timing.label && <strong>{timing.label}</strong>}<span><Clock3 size={15} /> {timing.time}</span></span>{timing.subjects && <span className="subject-pill">{timing.subjects}</span>}</div>)}</div>{detailed && <div className="course-syllabus"><strong>Office Hours</strong><span>4:00 PM – 8:00 PM</span></div>}<Link to="/enquiry">{detailed ? 'Enquire about this batch' : 'View programme'} <ArrowRight size={16} /></Link></article> }
 function EnquiryForm() { const [submitted, setSubmitted] = useState(false); if (submitted) return <div className="success-state"><span><Check size={24} /></span><h3>We have got your note.</h3><p>Thanks for reaching out. Our counsellor will call you within 24 hours.</p><button className="under-link" onClick={() => setSubmitted(false)}>Send another enquiry <ArrowRight size={15} /></button></div>; return <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true) }}><div className="form-heading"><span>Free counselling call</span><strong>Find your fit</strong></div><div className="form-grid"><label>Name<input required placeholder="Your name" /></label><label>Phone number<input required type="tel" placeholder="+91 98765 43210" /></label><label>Class / grade<select defaultValue="" required><option value="" disabled>Select class</option><option>KG – 5th</option><option>6th – 8th</option><option>9th</option><option>10th</option></select><ChevronDown size={15} /></label><label>Course/Batch Interested In<select defaultValue="" required><option value="" disabled>Select batch</option><option>Art Classes</option><option>Uprisers</option><option>Nova Leap</option><option>Ramanujan</option><option>Vector</option></select><ChevronDown size={15} /></label></div><label>Anything we should know? <textarea placeholder="Tell us about your goals (optional)" rows={3} /></label><label className="consent"><input type="checkbox" required /> <span>I agree to be contacted by Quantum Classes via phone or WhatsApp.</span></label><button className="button button-primary form-submit" type="submit">Request a callback <ArrowRight size={17} /></button></form> }
 
-function Home() { return <><Meta title="Home" description="Quantum Classes helps students build clear concepts, confidence and strong exam results." /><section className="hero-section"><div className="hero-copy"><div className="eyebrow"><span className="eyebrow-dot" /> Trusted by 500+ families since 2025</div><h1>Learning that<br /><em>moves you forward.</em></h1><p className="hero-lede">A focused, thoughtful approach to school and competitive exam preparation. Where strong fundamentals become confident futures.</p><div className="hero-actions"><Link className="button button-primary" to="/enquiry">Book a free demo <ArrowRight size={17} /></Link><Link className="button button-text" to="/courses"><span className="play-icon"><Play size={12} fill="currentColor" /></span> Explore programmes</Link></div><div className="hero-proof"><div className="avatars"><span>AK</span><span>SR</span><span>PM</span><span>+</span></div><p><strong>92% of students</strong><br />improve by 2+ grades</p></div></div><div className="hero-visual"><div className="hero-image-wrap"><img src="/home.png" alt="Students studying together in a bright classroom" /><div className="image-wash" /></div><div className="hero-note"><span className="note-icon"><Sparkles size={16} /></span><span><b>Small courses.</b><br />Real attention.</span></div><div className="hero-stamp"><strong>1+</strong><span>years of<br />excellence</span></div></div></section><Stats /><section className="section teaser-grid"><div className="section-intro"><div><span className="kicker">Our batch structure</span><h2>Find the batch that<br /><em>fits your stage.</em></h2></div><p>Four focused batch names, clear class ranges and timings that keep learning consistent.</p></div><div className="teaser-cards batch-teaser-cards">{courses.map((course, index) => <Link className="teaser-card" to="/courses" key={course.name}><span>0{index + 1}</span><h3>{course.name}</h3><p>{course.level}</p><div className="teaser-timings">{course.timings.map((timing) => <small key={`${course.name}-${timing.time}`}><Clock3 size={13} /> {timing.time}</small>)}</div><ArrowRight /></Link>)}</div></section><EnquiryCTA /></> }
+function GalleryStrip() {
+  const [images, setImages] = useState<{ id: string; name: string; src: string }[]>([])
+  const trackRef = useRef<HTMLDivElement>(null)
+  const touchStartRef = useRef(0)
+  const touchScrollRef = useRef(0)
+
+  useEffect(() => {
+    fetch('/api/gallery')
+      .then((r) => r.ok ? r.json() : Promise.reject())
+      .then((data: { categories: { images: { id: string; name: string; src: string }[] }[] }) => {
+        const all = data.categories.flatMap((c) => c.images)
+        if (all.length > 0) setImages(all)
+      })
+      .catch(() => { /* silent — strip stays hidden */ })
+  }, [])
+
+  const pauseAnim = () => { if (trackRef.current) trackRef.current.style.animationPlayState = 'paused' }
+  const resumeAnim = () => { if (trackRef.current) trackRef.current.style.animationPlayState = 'running' }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = e.touches[0].clientX
+    touchScrollRef.current = trackRef.current?.parentElement?.scrollLeft ?? 0
+    pauseAnim()
+  }
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!trackRef.current?.parentElement) return
+    trackRef.current.parentElement.scrollLeft = touchScrollRef.current + (touchStartRef.current - e.touches[0].clientX)
+  }
+  const handleTouchEnd = () => resumeAnim()
+
+  if (images.length === 0) return null
+
+  // Duplicate tiles so the strip loops seamlessly
+  const tiles = [...images, ...images]
+  const TILE_W = 260
+  const GAP = 12
+  const trackW = images.length * (TILE_W + GAP)
+
+  return (
+    <section className="moments-section" aria-label="Moments at Quantum Classes">
+      <div className="moments-header">
+        <div>
+          <span className="kicker">Our community</span>
+          <h2>Moments at<br /><em>Quantum Classes.</em></h2>
+        </div>
+        <Link className="under-link moments-link" to="/gallery">View all photos <ArrowRight size={15} /></Link>
+      </div>
+      <div
+        className="moments-viewport"
+        onMouseEnter={pauseAnim}
+        onMouseLeave={resumeAnim}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div
+          ref={trackRef}
+          className="moments-track"
+          style={{ '--moments-track-w': `${trackW}px` } as React.CSSProperties}
+        >
+          {tiles.map((img, i) => (
+            <div className="moments-tile" key={`${img.id}-${i}`}>
+              <img
+                src={img.src}
+                alt={img.name}
+                loading="lazy"
+                onError={(e) => {
+                  const tile = e.currentTarget.closest('.moments-tile') as HTMLElement | null
+                  if (tile) tile.style.display = 'none'
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Home() { return <><Meta title="Home" description="Quantum Classes helps students build clear concepts, confidence and strong exam results." /><section className="hero-section"><div className="hero-copy"><div className="eyebrow"><span className="eyebrow-dot" /> Trusted by 500+ families since 2025</div><h1>Learning that<br /><em>moves you forward.</em></h1><p className="hero-lede">A focused, thoughtful approach to school and competitive exam preparation. Where strong fundamentals become confident futures.</p><div className="hero-actions"><Link className="button button-primary" to="/enquiry">Book a free demo <ArrowRight size={17} /></Link><Link className="button button-text" to="/courses"><span className="play-icon"><Play size={12} fill="currentColor" /></span> Explore programmes</Link></div><div className="hero-proof"><div className="avatars"><span>AK</span><span>SR</span><span>PM</span><span>+</span></div><p><strong>92% of students</strong><br />improve by 2+ grades</p></div></div><div className="hero-visual"><div className="hero-image-wrap"><img src="/home.png" alt="Students studying together in a bright classroom" /><div className="image-wash" /></div><div className="hero-note"><span className="note-icon"><Sparkles size={16} /></span><span><b>Small courses.</b><br />Real attention.</span></div><div className="hero-stamp"><strong>1+</strong><span>years of<br />excellence</span></div></div></section><Stats /><GalleryStrip /><section className="section teaser-grid"><div className="section-intro"><div><span className="kicker">Our batch structure</span><h2>Find the batch that<br /><em>fits your stage.</em></h2></div><p>Four focused batch names, clear class ranges and timings that keep learning consistent.</p></div><div className="teaser-cards batch-teaser-cards">{courses.map((course, index) => <Link className="teaser-card" to="/courses" key={course.name}><span>0{index + 1}</span><h3>{course.name}</h3><p>{course.level}</p><div className="teaser-timings">{course.timings.map((timing) => <small key={`${course.name}-${timing.time}`}><Clock3 size={13} /> {timing.time}</small>)}</div><ArrowRight /></Link>)}</div></section><EnquiryCTA /></> }
 function Courses() { const [filter, setFilter] = useState('All courses'); const filtered = filter === 'All courses' ? courses : courses.filter((c) => c.tag === filter); return <><Meta title="Courses & Batches" description="Explore Art Classes, Uprisers, Nova Leap, Ramanujan and Vector batches at Quantum Classes." /><PageHero eyebrow="Courses & batches" title={<>Courses built<br /><em>around your stage.</em></>} description="Clear class ranges, focused subject groups and consistent timings for every learner." /><Link className="sticky-enquire" to="/enquiry">Enquire now <ArrowRight size={15} /></Link><section className="section courses-page"><div className="filter-row" role="tablist" aria-label="Filter by Class"><span className="filter-label">Filter by Class</span>{batchFilters.map((item) => <button key={item} className={filter === item ? 'filter active' : 'filter'} onClick={() => setFilter(item)}>{item}</button>)}</div><div className="course-grid">{filtered.map((course, i) => <CourseCard course={course} detailed key={course.name} index={i} />)}</div></section><EnquiryCTA /></> }
 function Fees() { const fees = [['Art Classes', '₹500', '₹2,600', '13.33% off', '₹4,600', '16.36% off'], ['Uprisers', '₹500', '₹2,700', '10% off', '₹4,900', '10.91% off'], ['Nova Leap', '₹800', '₹4,100', '14.58% off', '₹7,300', '17.05% off'], ['Ramanujan', '₹1,200', '₹6,200', '13.89% off', '₹11,100', '15.91% off'], ['Vector', '₹1,300', '₹6,800', '12.82% off', '₹12,200', '14.69% off']]; return <><Meta title="Fee Structure" description="Compare Quantum Classes batch fees across monthly, half-yearly, and yearly plans." /><PageHero eyebrow="Fee structure" title={<>Investment in<br /><em>what comes next.</em></>} description="Straightforward plans for every Quantum Classes batch, with savings for longer commitments." /><section className="section fee-page"><div className="fee-table-wrap"><table className="pricing-table"><thead><tr><th>Batch</th><th>Monthly</th><th>Half-Yearly (6 Months)</th><th>Yearly (11 Months)</th></tr></thead><tbody>{fees.map(([batch, monthly, halfYearly, halfDiscount, yearly, yearlyDiscount]) => <tr key={batch}><td className="fee-name">{batch}</td><td className="fee-amount">{monthly}</td><td className="fee-amount"><span>{halfYearly}</span><small className="discount-badge">{halfDiscount}</small></td><td className="fee-amount"><span>{yearly}</span><small className="discount-badge">{yearlyDiscount}</small></td></tr>)}</tbody></table></div><section className="fee-benefits"><h2>Additional Fee Benefits</h2><div className="benefit-list"><p><Check size={16} /> 10% extra discount for siblings (same parents)</p><p><Check size={16} /> 15% extra discount for batch toppers</p><p><Check size={16} /> Free study material — PDFs, Notes, DPP, etc.</p></div><div className="policy-list"><p><span className="info-icon">i</span> Monthly fee should be submitted between the 1st and 5th of the respective month, in advance</p><p><span className="info-icon">i</span> Refund policy available</p></div><Link className="under-link" to="/contact">Have questions about fees or refunds? Contact us <ArrowRight size={15} /></Link></section></section><EnquiryCTA /></> }
 function StudyMaterial() { const resources: [string, string, string, boolean][] = [['Physics', 'Class 12 · Formula sheet', 'PDF · 2.4 MB', false], ['Mathematics', 'JEE · Practice set 04', 'PDF · 4.1 MB', true], ['Biology', 'NEET · Human physiology', 'PDF · 1.8 MB', false], ['Chemistry', 'Organic reactions quick guide', 'PDF · 3.2 MB', true]]; return <><Meta title="Study Material" description="Browse Quantum Classes notes, practice sets and exam guides." /><PageHero eyebrow="Study material" title={<>Good preparation<br /><em>needs good tools.</em></>} description="Selected notes, practice sets and exam guides from our faculty, organised for focused practice." /><section className="section material-page"><div className="filter-row"><button className="filter active">All subjects</button><button className="filter">Class 10</button><button className="filter">Class 12</button><button className="filter">JEE / NEET</button></div><div className="resource-library">{resources.map(([subject, title, size, gated]) => <div className="resource-row" key={title}><span className="resource-icon"><Download size={17} /></span><span><small>{subject}</small><strong>{title}</strong><em>{size}</em></span>{gated ? <small className="login-note">Login required</small> : <Link to="/enquiry" aria-label={`Download ${title}`}><ExternalLink size={16} /></Link>}</div>)}</div></section><EnquiryCTA /></> }
