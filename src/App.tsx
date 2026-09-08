@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import {
   BrowserRouter,
   Link,
@@ -142,8 +148,8 @@ function Header() {
   useEffect(() => setOpen(false), [location.pathname]);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
     <>
@@ -153,7 +159,9 @@ function Header() {
           Book a free counselling call <ArrowRight size={14} />
         </Link>
       </div>
-      <header className={scrolled ? 'site-header header-scrolled' : 'site-header'}>
+      <header
+        className={scrolled ? "site-header header-scrolled" : "site-header"}
+      >
         <Brand />
         <button
           className="menu-toggle"
@@ -163,14 +171,14 @@ function Header() {
           {open ? <X /> : <Menu />}
         </button>
         <nav
-          className={open ? 'main-nav open' : 'main-nav'}
+          className={open ? "main-nav open" : "main-nav"}
           aria-label="Main navigation"
         >
           {navItems.map(([label, path]) => (
             <NavLink
               key={path}
               to={path}
-              className={({ isActive }) => (isActive ? 'active' : '')}
+              className={({ isActive }) => (isActive ? "active" : "")}
             >
               {label}
             </NavLink>
@@ -321,32 +329,43 @@ function EnquiryCTA() {
 function AnimationSystem() {
   const location = useLocation();
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const io = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
           if (e.isIntersecting) {
-            e.target.classList.add('anim-visible');
+            e.target.classList.add("anim-visible");
             io.unobserve(e.target);
           }
         }),
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
     );
 
     const timer = setTimeout(() => {
       // Block-level content — fade+slide in as a unit
       const blocks = [
-        '.section-intro', '.fee-table-wrap', '.fee-benefits',
-        '.about-copy', '.about-image', '.resource-library',
-        '.compact-cta', '.contact-details', '.map-placeholder',
-        '.form-card', '.enquire-copy', '.sm-layout', '.moments-header',
-        '.gallery-state', '.pricing-table', '.mission-grid > div',
+        ".section-intro",
+        ".fee-table-wrap",
+        ".fee-benefits",
+        ".about-copy",
+        ".about-image",
+        ".resource-library",
+        ".compact-cta",
+        ".contact-details",
+        ".map-placeholder",
+        ".form-card",
+        ".enquire-copy",
+        ".sm-layout",
+        ".moments-header",
+        ".gallery-state",
+        ".pricing-table",
+        ".mission-grid > div",
       ];
       blocks.forEach((sel) =>
         document.querySelectorAll<HTMLElement>(sel).forEach((el) => {
-          if (!el.classList.contains('anim-ready')) {
-            el.classList.add('anim-ready');
+          if (!el.classList.contains("anim-ready")) {
+            el.classList.add("anim-ready");
             io.observe(el);
           }
         }),
@@ -354,18 +373,22 @@ function AnimationSystem() {
 
       // Card grids — children get staggered delays
       const cardGrids = [
-        '.course-grid', '.teaser-cards',
-        '.infra-grid', '.social-feed-grid',
+        ".course-grid",
+        ".teaser-cards",
+        ".infra-grid",
+        ".social-feed-grid",
       ];
       cardGrids.forEach((sel) =>
         document.querySelectorAll<HTMLElement>(sel).forEach((grid) =>
-          Array.from(grid.children as HTMLCollectionOf<HTMLElement>).forEach((child, i) => {
-            if (!child.classList.contains('anim-ready')) {
-              child.classList.add('anim-ready');
-              child.style.transitionDelay = `${Math.min(i * 80, 400)}ms`;
-              io.observe(child);
-            }
-          }),
+          Array.from(grid.children as HTMLCollectionOf<HTMLElement>).forEach(
+            (child, i) => {
+              if (!child.classList.contains("anim-ready")) {
+                child.classList.add("anim-ready");
+                child.style.transitionDelay = `${Math.min(i * 80, 400)}ms`;
+                io.observe(child);
+              }
+            },
+          ),
         ),
       );
     }, 80);
@@ -410,20 +433,20 @@ function Stats({ compact = false }: { compact?: boolean }) {
   }, []);
   return (
     <section
-      className={`${compact ? 'stats-strip compact' : 'stats-strip'}${visible ? ' stats-visible' : ''}`}
+      className={`${compact ? "stats-strip compact" : "stats-strip"}${visible ? " stats-visible" : ""}`}
       ref={ref}
       aria-label="Quantum Classes statistics"
     >
       {[
-        ['50+', 'students taught'],
-        ['8+', 'top exam selections'],
-        ['1+', 'years of excellence'],
-        ['40%', 'average improvement'],
+        ["50+", "students taught"],
+        ["8+", "top exam selections"],
+        ["1+", "years of excellence"],
+        ["40%", "average improvement"],
       ].map(([n, label], i) => (
         <div className="stat" key={label}>
           <strong>{n}</strong>
           <span>{label}</span>
-          <i>{i < 3 ? '↗' : '↑'}</i>
+          <i>{i < 3 ? "↗" : "↑"}</i>
         </div>
       ))}
     </section>
@@ -514,7 +537,9 @@ function EnquiryForm() {
       form.reset();
       setSubmitted(true);
     } catch {
-      setError("Something went wrong. Please try again or contact us on WhatsApp.");
+      setError(
+        "Something went wrong. Please try again or contact us on WhatsApp.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -527,9 +552,26 @@ function EnquiryForm() {
           <Check size={24} />
         </span>
         <h3>✓ Enquiry received!</h3>
-        <p>Thank you for contacting Quantum Classes. Our counsellor will get in touch with you shortly.</p>
-        <div style={{ marginTop: '22px', display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center' }}>
-          <a href={contactDetails.whatsappUrl} target="_blank" rel="noopener noreferrer" className="button button-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+        <p>
+          Thank you for contacting Quantum Classes. Our counsellor will get in
+          touch with you shortly.
+        </p>
+        <div
+          style={{
+            marginTop: "22px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "14px",
+            alignItems: "center",
+          }}
+        >
+          <a
+            href={contactDetails.whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button button-primary"
+            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+          >
             Chat on WhatsApp <MessageCircle size={16} />
           </a>
           <button className="under-link" onClick={() => setSubmitted(false)}>
@@ -540,11 +582,34 @@ function EnquiryForm() {
     );
   return (
     <form onSubmit={handleSubmit}>
-      <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" className="web3forms-honeypot" aria-hidden="true" />
-      <div className="form-heading" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
+      <input
+        type="text"
+        name="botcheck"
+        tabIndex={-1}
+        autoComplete="off"
+        className="web3forms-honeypot"
+        aria-hidden="true"
+      />
+      <div
+        className="form-heading"
+        style={{
+          flexDirection: "column",
+          alignItems: "flex-start",
+          gap: "8px",
+        }}
+      >
         <strong>Find the right fit</strong>
-        <p style={{ margin: 0, fontSize: '13px', color: '#61736f', lineHeight: 1.5, fontFamily: 'sans-serif' }}>
-          Not sure which class or batch is right for you? Let's figure it out together.
+        <p
+          style={{
+            margin: 0,
+            fontSize: "13px",
+            color: "#61736f",
+            lineHeight: 1.5,
+            fontFamily: "sans-serif",
+          }}
+        >
+          Not sure which class or batch is right for you? Let's figure it out
+          together.
         </p>
       </div>
       <div className="form-grid">
@@ -554,23 +619,20 @@ function EnquiryForm() {
         </label>
         <label>
           Phone / WhatsApp Number *
-          <input required name="phone" type="tel" inputMode="tel" placeholder="+91 XXXXX XXXXX" />
-        </label>
-        <label>
-          Student's Class *
-          <select name="class" defaultValue="" required>
-            <option value="" disabled hidden>Select class</option>
-            <option>KG – 5th</option>
-            <option>6th – 8th</option>
-            <option>9th</option>
-            <option>10th</option>
-          </select>
-          <ChevronDown size={15} />
+          <input
+            required
+            name="phone"
+            type="tel"
+            inputMode="tel"
+            placeholder="+91 XXXXX XXXXX"
+          />
         </label>
         <label>
           What are you interested in? *
           <select name="interest" defaultValue="" required>
-            <option value="" disabled hidden>Select interest</option>
+            <option value="" disabled hidden>
+              Select interest
+            </option>
             <option>Regular Classes</option>
             <option>Subject Classes</option>
             <option>Exam Preparation</option>
@@ -583,12 +645,14 @@ function EnquiryForm() {
         <label>
           Preferred Batch / Course (Optional)
           <select name="preferred_batch" defaultValue="">
-            <option value="" disabled hidden>Select batch</option>
-            <option>Art Classes</option>
-            <option>Uprisers</option>
-            <option>Nova Leap</option>
-            <option>Ramanujan</option>
-            <option>Vector</option>
+            <option value="" disabled hidden>
+              Select batch
+            </option>
+            <option>Art Classes (All)</option>
+            <option>Uprisers (KG -5th)</option>
+            <option>Nova Leap (6th - 8th)</option>
+            <option>Ramanujan (9th)</option>
+            <option>Vector (10th)</option>
             <option>Not Sure</option>
           </select>
           <ChevronDown size={15} />
@@ -604,17 +668,36 @@ function EnquiryForm() {
       </div>
       <label>
         Anything you'd like us to know? (Optional)
-        <textarea name="message" placeholder="Tell us about your requirements, preferred timing, subjects, or anything you'd like to discuss..." rows={3} />
+        <textarea
+          name="message"
+          placeholder="Tell us about your requirements, preferred timing, subjects, or anything you'd like to discuss..."
+          rows={3}
+        />
       </label>
       <label className="consent">
         <input type="checkbox" name="consent" value="Yes" required />{" "}
         <span>
-          I agree to be contacted by Quantum Classes via phone or WhatsApp regarding my enquiry.
+          I agree to be contacted by Quantum Classes via phone or WhatsApp
+          regarding my enquiry.
         </span>
       </label>
-      {error && <p className="form-status form-error" role="alert">{error}</p>}
-      <button className="button button-primary form-submit" type="submit" disabled={submitting}>
-        {submitting ? "Sending..." : <>Get Free Counselling <ArrowRight size={17} /></>}
+      {error && (
+        <p className="form-status form-error" role="alert">
+          {error}
+        </p>
+      )}
+      <button
+        className="button button-primary form-submit"
+        type="submit"
+        disabled={submitting}
+      >
+        {submitting ? (
+          "Sending..."
+        ) : (
+          <>
+            Get Free Counselling <ArrowRight size={17} />
+          </>
+        )}
       </button>
     </form>
   );
@@ -887,11 +970,46 @@ function Courses() {
 }
 function Fees() {
   const fees = [
-    ["Art Classes (All age)", "₹500", "₹2,600", "13.33% off", "₹4,600", "16.36% off"],
-    ["Uprisers (KG - 5th)", "₹500", "₹2,700", "10% off", "₹4,900", "10.91% off"],
-    ["Nova Leap (6th - 8th)", "₹800", "₹4,100", "14.58% off", "₹7,300", "17.05% off"],
-    ["Ramanujan (9th)", "₹1,200", "₹6,200", "13.89% off", "₹11,100", "15.91% off"],
-    ["Vector (10th)", "₹1,300", "₹6,800", "12.82% off", "₹12,200", "14.69% off"],
+    [
+      "Art Classes (All age)",
+      "₹500",
+      "₹2,600",
+      "13.33% off",
+      "₹4,600",
+      "16.36% off",
+    ],
+    [
+      "Uprisers (KG - 5th)",
+      "₹500",
+      "₹2,700",
+      "10% off",
+      "₹4,900",
+      "10.91% off",
+    ],
+    [
+      "Nova Leap (6th - 8th)",
+      "₹800",
+      "₹4,100",
+      "14.58% off",
+      "₹7,300",
+      "17.05% off",
+    ],
+    [
+      "Ramanujan (9th)",
+      "₹1,200",
+      "₹6,200",
+      "13.89% off",
+      "₹11,100",
+      "15.91% off",
+    ],
+    [
+      "Vector (10th)",
+      "₹1,300",
+      "₹6,800",
+      "12.82% off",
+      "₹12,200",
+      "14.69% off",
+    ],
   ];
   return (
     <>
