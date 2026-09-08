@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import {
   BrowserRouter,
   Link,
@@ -484,28 +484,58 @@ function CourseCard({
 }
 function EnquiryForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const phone = String(formData.get("phone") || "").trim();
+    const normalizedPhone = phone.replace(/[\s-]/g, "");
+    if (!/^(?:\+91|91)?[6-9]\d{9}$/.test(normalizedPhone)) {
+      setError("Please enter a valid Indian mobile number.");
+      return;
+    }
+    formData.set("phone", phone);
+    formData.set("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "");
+    formData.set("subject", "New Enquiry — Quantum Classes");
+    formData.set("from_name", "Quantum Classes Website");
+    setSubmitting(true);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error("Submission failed");
+      form.reset();
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again or contact us on WhatsApp.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (submitted)
     return (
       <div className="success-state">
         <span>
           <Check size={24} />
         </span>
-        <h3>We have got your note.</h3>
-        <p>
-          Thanks for reaching out. Our counsellor will call you within 24 hours.
-        </p>
+        <h3>Thank you!</h3>
+        <p>Your enquiry has been received. Our team will contact you shortly.</p>
         <button className="under-link" onClick={() => setSubmitted(false)}>
           Send another enquiry <ArrowRight size={15} />
         </button>
       </div>
     );
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSubmitted(true);
-      }}
-    >
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" className="web3forms-honeypot" aria-hidden="true" />
       <div className="form-heading">
         <span>Free counselling call</span>
         <strong>Find your fit</strong>
@@ -513,15 +543,15 @@ function EnquiryForm() {
       <div className="form-grid">
         <label>
           Name
-          <input required placeholder="Your name" />
+          <input required name="name" placeholder="Your name" />
         </label>
         <label>
           Phone number
-          <input required type="tel" placeholder="+91 98765 43210" />
+          <input required name="phone" type="tel" inputMode="tel" placeholder="+91 98765 43210" />
         </label>
         <label>
           Class / grade
-          <select defaultValue="" required>
+          <select name="class" defaultValue="" required>
             <option value="" disabled>
               Select class
             </option>
@@ -534,7 +564,7 @@ function EnquiryForm() {
         </label>
         <label>
           Course/Batch Interested In
-          <select defaultValue="" required>
+          <select name="course_batch" defaultValue="" required>
             <option value="" disabled>
               Select batch
             </option>
@@ -549,16 +579,17 @@ function EnquiryForm() {
       </div>
       <label>
         Anything we should know?{" "}
-        <textarea placeholder="Tell us about your goals (optional)" rows={3} />
+        <textarea name="message" placeholder="Tell us about your goals (optional)" rows={3} />
       </label>
       <label className="consent">
-        <input type="checkbox" required />{" "}
+        <input type="checkbox" name="consent" value="Yes" required />{" "}
         <span>
           I agree to be contacted by Quantum Classes via phone or WhatsApp.
         </span>
       </label>
-      <button className="button button-primary form-submit" type="submit">
-        Request a callback <ArrowRight size={17} />
+      {error && <p className="form-status form-error" role="alert">{error}</p>}
+      <button className="button button-primary form-submit" type="submit" disabled={submitting}>
+        {submitting ? "Sending..." : <>Request a callback <ArrowRight size={17} /></>}
       </button>
     </form>
   );

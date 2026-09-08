@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
+.web3forms-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}.form-status{font-size:11px;line-height:1.5;margin:16px 0 0}.form-error{color:#a44e43}.form-submit:disabled{opacity:.65;cursor:wait;transform:none}
+
 :root {
     --teal: #0b4f55;
     --teal-dark: #073b40;
