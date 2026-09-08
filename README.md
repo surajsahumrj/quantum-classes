@@ -15,11 +15,11 @@ The `/gallery` page reads every direct subfolder of the configured root folder a
 
 The API caches the category and file listing for 15 minutes. New uploads appear after the cache expires or after the server is restarted. Images are streamed through the server using the service account, so Drive credentials and private file URLs are never exposed to the browser.
 
-For production, build the frontend with `npm run build`, configure the four environment variables in the hosting provider, then run `npm start`. Restrict the service account to Viewer access on this one Drive folder only.
+For production, build the frontend with `npm run build`, configure `GOOGLE_DRIVE_FOLDER_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `GOOGLE_PRIVATE_KEY` in the hosting provider, then run `npm start`. Restrict the service account to Viewer access on this one Drive folder only.
 
 ## Credentials and rotation
 
 - `.env` and other environment files are ignored by Git; `.env.example` contains placeholders only.
-- The private key supplied during planning was exposed outside a secrets manager. Rotate/revoke it in Google Cloud IAM before production use, create a replacement key, and update `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` in the hosting provider.
+- The private key supplied during planning was exposed outside a secrets manager. Rotate/revoke it in Google Cloud IAM before production use, create a replacement key, and update `GOOGLE_PRIVATE_KEY` in the hosting provider.
 - After rotation, verify `/api/gallery` and `/gallery`, then delete the old key from the service account.
 - Do not commit a JSON key file, private key, image URL, or filename as a credential or source of truth.

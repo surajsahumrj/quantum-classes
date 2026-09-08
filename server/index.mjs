@@ -19,7 +19,7 @@ function requiredEnv(name) {
 function getDrive() {
   const auth = new google.auth.JWT({
     email: requiredEnv('GOOGLE_SERVICE_ACCOUNT_EMAIL'),
-    key: requiredEnv('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY').replace(/\\n/g, '\n'),
+    key: requiredEnv('GOOGLE_PRIVATE_KEY').replace(/\\n/g, '\n'),
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
   })
   return google.drive({ version: 'v3', auth })
@@ -46,7 +46,7 @@ async function listAllFiles(drive, query, fields) {
 
 async function loadGallery() {
   const drive = getDrive()
-  const rootFolderId = requiredEnv('GOOGLE_DRIVE_ROOT_FOLDER_ID')
+  const rootFolderId = requiredEnv('GOOGLE_DRIVE_FOLDER_ID')
   const folders = await listAllFiles(
     drive,
     `'${rootFolderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
