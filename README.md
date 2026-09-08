@@ -29,9 +29,9 @@ After deployment, verify `https://YOUR_DOMAIN/api/gallery`, then take an image `
 
 ## Drive gallery
 
-The `/gallery` page reads every direct subfolder of the configured root folder as a category. Category names come from Drive folder names, so adding a folder such as `Annual Day 2027` requires no code change. JPG, JPEG, PNG, and WebP files are included; PDFs and other file types are ignored.
+The `/gallery` page reads every direct subfolder of the configured root folder as a category. Category names come from Drive folder names, so adding a folder such as `Annual Day 2027` requires no code change. JPG, JPEG, PNG, WebP, HEIC, and HEIF files are included; PDFs and other file types are ignored. HEIC/HEIF files use Google Drive's authenticated browser-compatible thumbnail instead of sending the original HEIC bytes to the browser.
 
-The API caches the category and file listing for 15 minutes. New uploads appear after the cache expires or after the server is restarted. Images are streamed through the server using the service account, so Drive credentials and private file URLs are never exposed to the browser.
+The API caches the category and file listing for 15 minutes. New uploads appear after the cache expires or after the server is restarted. JPG, JPEG, PNG, and WebP files are buffered and returned with their binary bytes and correct `Content-Type`; HEIC/HEIF files are fetched from Drive's authenticated `thumbnailLink` and returned as a browser-compatible preview. Drive credentials and private file URLs are never exposed to the browser.
 
 For production, build the frontend with `npm run build`, configure `GOOGLE_DRIVE_FOLDER_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `GOOGLE_PRIVATE_KEY` in the hosting provider, then run `npm start`. Restrict the service account to Viewer access on this one Drive folder only.
 

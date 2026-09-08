@@ -6,7 +6,7 @@ export default async function handler(request, response) {
     return response.status(405).end()
   }
   try {
-    return await streamImage(request.query.fileId, response)
+    return await streamImage(request.query.fileId, response, request.query.preview === '1')
   } catch (error) {
     console.error('Gallery image error:', error)
     return response.status(404).end()

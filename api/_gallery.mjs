@@ -1,7 +1,8 @@
 import { google } from 'googleapis'
 
 const cacheMs = 15 * 60 * 1000
-const imageMimeTypes = new Set(['image/jpeg', 'image/png', 'image/webp'])
+const imageMimeTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'])
+const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'])
 let galleryCache = { expiresAt: 0, data: null }
 
 function requiredEnv(name) {
@@ -10,15 +11,18 @@ function requiredEnv(name) {
   return value
 }
 
-function getDrive() {
-  return google.drive({
-    version: 'v3',
-    auth: new google.auth.JWT({
-      email: requiredEnv('GOOGLE_SERVICE_ACCOUNT_EMAIL'),
-      key: requiredEnv('GOOGLE_PRIVATE_KEY').replace(/\\n/g, '\n'),
-      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-    }),
+function getDriveClient() {
+  const auth = new google.auth.JWT({
+    email: requiredEnv('GOOGLE_SERVICE_ACCOUNT_EMAIL'),
+    key: requiredEnv('GOOGLE_PRIVATE_KEY').replace(/\\n/g, '\n'),
+    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
   })
+  return { auth, drive: google.drive({ version: 'v3', auth }) }
+}
+
+function isSupportedImage(file) {
+  const extension = file.name ? file.name.slice(file.name.lastIndexOf('.')).toLowerCase() : ''
+  return imageMimeTypes.has(file.mimeType) || imageExtensions.has(extension)
 }
 
 async function listAllFiles(drive, query, fields) {
@@ -42,7 +46,7 @@ async function listAllFiles(drive, query, fields) {
 
 export async function getGallery() {
   if (galleryCache.data && galleryCache.expiresAt > Date.now()) return galleryCache.data
-  const drive = getDrive()
+  const { drive } = getDriveClient()
   const rootFolderId = requiredEnv('GOOGLE_DRIVE_FOLDER_ID')
   const folders = await listAllFiles(
     drive,
@@ -53,13 +57,13 @@ export async function getGallery() {
     const files = await listAllFiles(
       drive,
       `'${folder.id}' in parents and trashed = false`,
-      'id,name,mimeType',
+      'id,name,mimeType,thumbnailLink',
     )
     return {
       id: folder.id,
       name: folder.name,
       images: files
-        .filter((file) => imageMimeTypes.has(file.mimeType))
+        .filter(isSupportedImage)
         .map((file) => ({ id: file.id, name: file.name, src: `/api/gallery/image/${file.id}` })),
     }
   }))
@@ -68,16 +72,31 @@ export async function getGallery() {
   return data
 }
 
-export async function streamImage(fileId, response) {
-  const drive = getDrive()
-  const metadata = await drive.files.get({ fileId, fields: 'mimeType,name' })
-  if (!imageMimeTypes.has(metadata.data.mimeType)) {
+export async function streamImage(fileId, response, preview = false) {
+  const { auth, drive } = getDriveClient()
+  const metadata = await drive.files.get({ fileId, fields: 'mimeType,name,thumbnailLink' })
+  if (!isSupportedImage(metadata.data)) {
     response.status(404).end()
     return
   }
+  let body
+  let contentType = metadata.data.mimeType
+  if (metadata.data.mimeType === 'image/heic' || metadata.data.mimeType === 'image/heif' || preview) {
+    if (!metadata.data.thumbnailLink) {
+      response.status(404).end()
+      return
+    }
+    const thumbnailUrl = preview ? metadata.data.thumbnailLink.replace(/=s\d+$/, '=s1600') : metadata.data.thumbnailLink
+    const thumbnail = await fetch(thumbnailUrl, { headers: await auth.getRequestHeaders() })
+    if (!thumbnail.ok) throw new Error(`Drive thumbnail request failed: ${thumbnail.status}`)
+    body = Buffer.from(await thumbnail.arrayBuffer())
+    contentType = thumbnail.headers.get('content-type') || 'image/jpeg'
+  } else {
+    const file = await drive.files.get({ fileId, alt: 'media' }, { responseType: 'arraybuffer' })
+    body = Buffer.from(file.data)
+  }
   response.setHeader('Cache-Control', 'public, max-age=900, stale-while-revalidate=3600')
-  response.setHeader('Content-Type', metadata.data.mimeType)
-  const file = await drive.files.get({ fileId, alt: 'media' }, { responseType: 'stream' })
-  file.data.on('error', () => response.destroy())
-  file.data.pipe(response)
+  response.setHeader('Content-Type', contentType)
+  response.setHeader('Content-Length', body.length)
+  response.status(200).send(body)
 }
