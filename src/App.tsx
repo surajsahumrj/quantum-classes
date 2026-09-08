@@ -526,35 +526,40 @@ function EnquiryForm() {
         <span>
           <Check size={24} />
         </span>
-        <h3>Thank you!</h3>
-        <p>Your enquiry has been received. Our team will contact you shortly.</p>
-        <button className="under-link" onClick={() => setSubmitted(false)}>
-          Send another enquiry <ArrowRight size={15} />
-        </button>
+        <h3>✓ Enquiry received!</h3>
+        <p>Thank you for contacting Quantum Classes. Our counsellor will get in touch with you shortly.</p>
+        <div style={{ marginTop: '22px', display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center' }}>
+          <a href={contactDetails.whatsappUrl} target="_blank" rel="noopener noreferrer" className="button button-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            Chat on WhatsApp <MessageCircle size={16} />
+          </a>
+          <button className="under-link" onClick={() => setSubmitted(false)}>
+            Send another enquiry <ArrowRight size={15} />
+          </button>
+        </div>
       </div>
     );
   return (
     <form onSubmit={handleSubmit}>
       <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" className="web3forms-honeypot" aria-hidden="true" />
-      <div className="form-heading">
-        <span>Free counselling call</span>
-        <strong>Find your fit</strong>
+      <div className="form-heading" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
+        <strong>Find the right fit</strong>
+        <p style={{ margin: 0, fontSize: '13px', color: '#61736f', lineHeight: 1.5, fontFamily: 'sans-serif' }}>
+          Not sure which class or batch is right for you? Let's figure it out together.
+        </p>
       </div>
       <div className="form-grid">
         <label>
-          Name
-          <input required name="name" placeholder="Your name" />
+          Parent / Student Name *
+          <input required name="name" placeholder="Enter your name" />
         </label>
         <label>
-          Phone number
-          <input required name="phone" type="tel" inputMode="tel" placeholder="+91 98765 43210" />
+          Phone / WhatsApp Number *
+          <input required name="phone" type="tel" inputMode="tel" placeholder="+91 XXXXX XXXXX" />
         </label>
         <label>
-          Class / grade
+          Student's Class *
           <select name="class" defaultValue="" required>
-            <option value="" disabled>
-              Select class
-            </option>
+            <option value="" disabled hidden>Select class</option>
             <option>KG – 5th</option>
             <option>6th – 8th</option>
             <option>9th</option>
@@ -563,33 +568,53 @@ function EnquiryForm() {
           <ChevronDown size={15} />
         </label>
         <label>
-          Course/Batch Interested In
-          <select name="course_batch" defaultValue="" required>
-            <option value="" disabled>
-              Select batch
-            </option>
+          What are you interested in? *
+          <select name="interest" defaultValue="" required>
+            <option value="" disabled hidden>Select interest</option>
+            <option>Regular Classes</option>
+            <option>Subject Classes</option>
+            <option>Exam Preparation</option>
+            <option>Foundation / Concept Building</option>
+            <option>Art Classes</option>
+            <option>Not Sure — Need Guidance</option>
+          </select>
+          <ChevronDown size={15} />
+        </label>
+        <label>
+          Preferred Batch / Course (Optional)
+          <select name="preferred_batch" defaultValue="">
+            <option value="" disabled hidden>Select batch</option>
             <option>Art Classes</option>
             <option>Uprisers</option>
             <option>Nova Leap</option>
             <option>Ramanujan</option>
             <option>Vector</option>
+            <option>Not Sure</option>
+          </select>
+          <ChevronDown size={15} />
+        </label>
+        <label>
+          Preferred Contact Method
+          <select name="contact_method" defaultValue="WhatsApp">
+            <option>WhatsApp</option>
+            <option>Phone Call</option>
           </select>
           <ChevronDown size={15} />
         </label>
       </div>
       <label>
-        Anything we should know?{" "}
-        <textarea name="message" placeholder="Tell us about your goals (optional)" rows={3} />
+        Anything you'd like us to know? (Optional)
+        <textarea name="message" placeholder="Tell us about your requirements, preferred timing, subjects, or anything you'd like to discuss..." rows={3} />
       </label>
       <label className="consent">
         <input type="checkbox" name="consent" value="Yes" required />{" "}
         <span>
-          I agree to be contacted by Quantum Classes via phone or WhatsApp.
+          I agree to be contacted by Quantum Classes via phone or WhatsApp regarding my enquiry.
         </span>
       </label>
       {error && <p className="form-status form-error" role="alert">{error}</p>}
       <button className="button button-primary form-submit" type="submit" disabled={submitting}>
-        {submitting ? "Sending..." : <>Request a callback <ArrowRight size={17} /></>}
+        {submitting ? "Sending..." : <>Get Free Counselling <ArrowRight size={17} /></>}
       </button>
     </form>
   );
