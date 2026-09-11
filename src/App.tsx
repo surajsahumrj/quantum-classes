@@ -252,7 +252,9 @@ function Footer() {
       </div>
       <div className="footer-bottom">
         <span>© 2026 Quantum Classes. All rights reserved.</span>
-        <span>Made for curious minds.</span>
+        <span><a href="https://surajsahumrj.netlify.app" target="_blank" rel="noopener noreferrer">
+          Created with ❤️ by Suraj Sahu
+        </a></span>
       </div>
     </footer>
   );
