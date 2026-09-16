@@ -159,39 +159,43 @@ function Header() {
   return (
     <>
       <div className="announcement">
-        <span>Admissions open for 2026–27</span>
-        <Link to="/enquiry">
-          Book a free counselling call <ArrowRight size={14} />
-        </Link>
+        <div className="container announcement-inner">
+          <span>Admissions open for 2026–27</span>
+          <Link to="/enquiry">
+            Book a free counselling call <ArrowRight size={14} />
+          </Link>
+        </div>
       </div>
       <header
         className={scrolled ? "site-header header-scrolled" : "site-header"}
       >
-        <Brand />
-        <button
-          className="menu-toggle"
-          aria-label="Toggle menu"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X /> : <Menu />}
-        </button>
-        <nav
-          className={open ? "main-nav open" : "main-nav"}
-          aria-label="Main navigation"
-        >
-          {navItems.map(([label, path]) => (
-            <NavLink
-              key={path}
-              to={path}
-              className={({ isActive }) => (isActive ? "active" : "")}
-            >
-              {label}
-            </NavLink>
-          ))}
-          <Link className="nav-cta" to="/enquiry">
-            Enquire now <ArrowRight size={15} />
-          </Link>
-        </nav>
+        <div className="container site-header-inner">
+          <Brand />
+          <button
+            className="menu-toggle"
+            aria-label="Toggle menu"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X /> : <Menu />}
+          </button>
+          <nav
+            className={open ? "main-nav open" : "main-nav"}
+            aria-label="Main navigation"
+          >
+            {navItems.map(([label, path]) => (
+              <NavLink
+                key={path}
+                to={path}
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                {label}
+              </NavLink>
+            ))}
+            <Link className="nav-cta" to="/enquiry">
+              Enquire now <ArrowRight size={15} />
+            </Link>
+          </nav>
+        </div>
       </header>
     </>
   );
@@ -199,7 +203,7 @@ function Header() {
 function Footer() {
   return (
     <footer>
-      <div className="footer-top">
+      <div className="container footer-top">
         <Brand />
 
         <div className="footer-links">
@@ -262,7 +266,7 @@ function Footer() {
           />
         </div>
       </div>
-      <div className="footer-bottom">
+      <div className="container footer-bottom">
         <span>© 2026 Quantum Classes. All rights reserved.</span>
         <span><a href="https://surajsahumrj.netlify.app" target="_blank" rel="noopener noreferrer">
           Created with ❤️ by Suraj Sahu
@@ -308,35 +312,39 @@ function PageHero({
 }) {
   return (
     <section className="page-hero">
-      <div className="breadcrumbs">
-        <Link to="/">Home</Link>
-        <span>/</span>
-        <strong>{eyebrow}</strong>
+      <div className="container">
+        <div className="breadcrumbs">
+          <Link to="/">Home</Link>
+          <span>/</span>
+          <strong>{eyebrow}</strong>
+        </div>
+        <span className="kicker">{eyebrow}</span>
+        <h1>{title}</h1>
+        <p>{description}</p>
       </div>
-      <span className="kicker">{eyebrow}</span>
-      <h1>{title}</h1>
-      <p>{description}</p>
     </section>
   );
 }
 function EnquiryCTA() {
   return (
     <section className="compact-cta">
-      <div>
-        <span className="kicker light">Your next step</span>
-        <h2>
-          Find the right
-          <br />
-          <em>place to begin.</em>
-        </h2>
+      <div className="container compact-cta-grid">
+        <div>
+          <span className="kicker light">Your next step</span>
+          <h2>
+            Find the right
+            <br />
+            <em>place to begin.</em>
+          </h2>
+        </div>
+        <p>
+          Tell us where you are headed. Our counsellor will help you find a
+          clear, practical path.
+        </p>
+        <Link className="button button-light" to="/enquiry">
+          Book a free counselling call <ArrowRight size={16} />
+        </Link>
       </div>
-      <p>
-        Tell us where you are headed. Our counsellor will help you find a clear,
-        practical path.
-      </p>
-      <Link className="button button-light" to="/enquiry">
-        Book a free counselling call <ArrowRight size={16} />
-      </Link>
     </section>
   );
 }
@@ -451,18 +459,20 @@ function Stats({ compact = false }: { compact?: boolean }) {
       ref={ref}
       aria-label="Quantum Classes statistics"
     >
-      {[
-        ["50+", "students taught"],
-        ["8+", "top exam selections"],
-        ["1+", "years of excellence"],
-        ["40%", "average improvement"],
-      ].map(([n, label], i) => (
-        <div className="stat" key={label}>
-          <strong>{n}</strong>
-          <span>{label}</span>
-          <i>{i < 3 ? "↗" : "↑"}</i>
-        </div>
-      ))}
+      <div className="container stats-grid">
+        {[
+          ["50+", "students taught"],
+          ["8+", "top exam selections"],
+          ["1+", "years of excellence"],
+          ["40%", "average improvement"],
+        ].map(([n, label], i) => (
+          <div className="stat" key={label}>
+            <strong>{n}</strong>
+            <span>{label}</span>
+            <i>{i < 3 ? "↗" : "↑"}</i>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
@@ -773,7 +783,7 @@ function GalleryStrip() {
       className="moments-section"
       aria-label="Moments at Quantum Classes"
     >
-      <div className="moments-header">
+      <div className="container moments-header">
         <div>
           <span className="kicker">Our community</span>
           <h2>
@@ -828,6 +838,7 @@ function Home() {
         description="Quantum Classes helps students build clear concepts, confidence and strong exam results."
       />
       <section className="hero-section">
+       <div className="container hero-grid">
         <div className="hero-copy">
           <div className="eyebrow">
             <span className="eyebrow-dot" /> Trusted by 100+ families since 2025
@@ -893,40 +904,43 @@ function Home() {
             </span>
           </div>
         </div>
+       </div>
       </section>
       <Stats />
       <GalleryStrip />
       <section className="section teaser-grid">
-        <div className="section-intro">
-          <div>
-            <span className="kicker">Our batch structure</span>
-            <h2>
-              Find the batch that
-              <br />
-              <em>fits your stage.</em>
-            </h2>
+        <div className="container">
+          <div className="section-intro">
+            <div>
+              <span className="kicker">Our batch structure</span>
+              <h2>
+                Find the batch that
+                <br />
+                <em>fits your stage.</em>
+              </h2>
+            </div>
+            <p>
+              Four focused batch names, clear class ranges and timings that
+              keep learning consistent.
+            </p>
           </div>
-          <p>
-            Four focused batch names, clear class ranges and timings that keep
-            learning consistent.
-          </p>
-        </div>
-        <div className="teaser-cards batch-teaser-cards">
-          {courses.map((course, index) => (
-            <Link className="teaser-card" to="/courses" key={course.name}>
-              <span>0{index + 1}</span>
-              <h3>{course.name}</h3>
-              <p>{course.level}</p>
-              <div className="teaser-timings">
-                {course.timings.map((timing) => (
-                  <small key={`${course.name}-${timing.time}`}>
-                    <Clock3 size={13} /> {timing.time}
-                  </small>
-                ))}
-              </div>
-              <ArrowRight />
-            </Link>
-          ))}
+          <div className="teaser-cards batch-teaser-cards">
+            {courses.map((course, index) => (
+              <Link className="teaser-card" to="/courses" key={course.name}>
+                <span>0{index + 1}</span>
+                <h3>{course.name}</h3>
+                <p>{course.level}</p>
+                <div className="teaser-timings">
+                  {course.timings.map((timing) => (
+                    <small key={`${course.name}-${timing.time}`}>
+                      <Clock3 size={13} /> {timing.time}
+                    </small>
+                  ))}
+                </div>
+                <ArrowRight />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
       <EnquiryCTA />
@@ -956,26 +970,39 @@ function Courses() {
         }
         description="Clear class ranges, focused subject groups and consistent timings for every learner."
       />
-      <Link className="sticky-enquire" to="/enquiry">
-        Enquire now <ArrowRight size={15} />
-      </Link>
+      <div className="container sticky-enquire-row">
+        <Link className="sticky-enquire" to="/enquiry">
+          Enquire now <ArrowRight size={15} />
+        </Link>
+      </div>
       <section className="section courses-page">
-        <div className="filter-row" role="tablist" aria-label="Filter by Class">
-          <span className="filter-label">Filter by Class</span>
-          {batchFilters.map((item) => (
-            <button
-              key={item}
-              className={filter === item ? "filter active" : "filter"}
-              onClick={() => setFilter(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-        <div className="course-grid">
-          {filtered.map((course, i) => (
-            <CourseCard course={course} detailed key={course.name} index={i} />
-          ))}
+        <div className="container">
+          <div
+            className="filter-row"
+            role="tablist"
+            aria-label="Filter by Class"
+          >
+            <span className="filter-label">Filter by Class</span>
+            {batchFilters.map((item) => (
+              <button
+                key={item}
+                className={filter === item ? "filter active" : "filter"}
+                onClick={() => setFilter(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+          <div className="course-grid">
+            {filtered.map((course, i) => (
+              <CourseCard
+                course={course}
+                detailed
+                key={course.name}
+                index={i}
+              />
+            ))}
+          </div>
         </div>
       </section>
       <EnquiryCTA />
@@ -1043,6 +1070,7 @@ function Fees() {
         description="Straightforward plans for every Quantum Classes batch, with savings for longer commitments."
       />
       <section className="section fee-page">
+       <div className="container">
         <div className="fee-table-wrap">
           <table className="pricing-table">
             <thead>
@@ -1108,6 +1136,7 @@ function Fees() {
             <ArrowRight size={15} />
           </Link>
         </section>
+       </div>
       </section>
       <EnquiryCTA />
     </>
@@ -1217,7 +1246,7 @@ function StudyMaterial() {
       />
 
       <div className="sm-hero">
-        <div className="sm-hero-content">
+        <div className="container sm-hero-content">
           <h1>QUANTUM<br />STUDY LIBRARY</h1>
           <p>Notes, chapters and study material — all in one place.</p>
 
@@ -1229,6 +1258,7 @@ function StudyMaterial() {
       </div>
 
       <section className="section sm-main">
+       <div className="container">
         {loading && (
           <div className="sm-skeleton-container">
             <div className="sm-skeleton-classes">
@@ -1351,6 +1381,7 @@ function StudyMaterial() {
             )}
           </div>
         )}
+       </div>
       </section>
       <EnquiryCTA />
     </>
@@ -1420,6 +1451,7 @@ function About() {
         description="Education should make you more curious, not just more prepared."
       />
       <section className="section about-page">
+       <div className="container about-grid">
         <div className="about-copy">
           <span className="kicker">Our story</span>
           <h2>
@@ -1458,8 +1490,10 @@ function About() {
             <span>Gorakhpur</span>
           </div>
         </div>
+       </div>
       </section>
       <section className="section infrastructure">
+       <div className="container">
         <span className="kicker">Built for attention</span>
         <h2>
           Spaces that support
@@ -1494,6 +1528,7 @@ function About() {
             </p>
           </div>
         </div>
+       </div>
       </section>
       <EnquiryCTA />
     </>
@@ -1502,6 +1537,7 @@ function About() {
 function SocialFeed() {
   return (
     <section className="section social-feed">
+     <div className="container">
       <div className="section-intro">
         <div>
           <span className="kicker">Stay connected</span>
@@ -1550,6 +1586,7 @@ function SocialFeed() {
           <ExternalLink size={16} />
         </a>
       </div>
+     </div>
     </section>
   );
 }
@@ -1572,6 +1609,7 @@ function Contact() {
         description="Questions about courses, fees or the right starting point? We are here to help."
       />
       <section className="section contact-page">
+       <div className="container contact-grid">
         <div className="contact-details">
           <div>
             <MapPin />
@@ -1649,6 +1687,7 @@ function Contact() {
             <span>Padri Bazaar, Gorakhpur</span>
           </div>
         </div>
+       </div>
       </section>
       <SocialFeed />
       <EnquiryCTA />
@@ -1743,6 +1782,7 @@ function Gallery() {
         description="Explore moments from our classrooms, events, students, results and campus. Categories update automatically from our Google Drive gallery."
       />
       <section className="section gallery-page">
+       <div className="container">
         <div
           className="filter-row gallery-tabs"
           role="tablist"
@@ -1830,6 +1870,7 @@ function Gallery() {
             </span>
           </div>
         )}
+       </div>
       </section>
       {selectedImage && (
         <div
@@ -1903,6 +1944,7 @@ function Enquiry() {
         description="Tell us a little about where you are. A counsellor will call within 24 hours to help you find the right fit."
       />
       <section className="enquiry-page">
+       <div className="container enquiry-grid">
         <div className="enquire-copy">
           <span className="kicker light">Free counselling call</span>
           <h2>
@@ -1930,6 +1972,7 @@ function Enquiry() {
         <div className="form-card">
           <EnquiryForm />
         </div>
+       </div>
       </section>
     </>
   );
