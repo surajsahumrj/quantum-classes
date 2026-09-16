@@ -72,21 +72,38 @@ export async function getStudyMaterial() {
 
       const subjects = await Promise.all(
         subjectFolders.map(async (subjectFolder) => {
-          // Only PDFs inside each subject folder
-          const files = await listAllFiles(
+          // Discover chapter folders within each subject
+          const chapterFolders = await listAllFiles(
             drive,
-            `'${subjectFolder.id}' in parents and mimeType = 'application/pdf' and trashed = false`,
-            'id,name,size',
+            `'${subjectFolder.id}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+            'id,name',
+          )
+
+          const chapters = await Promise.all(
+            chapterFolders.map(async (chapterFolder) => {
+              // Only PDFs inside each chapter folder
+              const files = await listAllFiles(
+                drive,
+                `'${chapterFolder.id}' in parents and mimeType = 'application/pdf' and trashed = false`,
+                'id,name,size',
+              )
+
+              return {
+                id: chapterFolder.id,
+                name: chapterFolder.name,
+                files: files.map((f) => ({
+                  id: f.id,
+                  name: f.name.replace(/\.pdf$/i, '').trim(),
+                  size: formatSize(f.size),
+                })),
+              }
+            })
           )
 
           return {
             id: subjectFolder.id,
             name: subjectFolder.name,
-            files: files.map((f) => ({
-              id: f.id,
-              name: f.name.replace(/\.pdf$/i, '').trim(),
-              size: formatSize(f.size),
-            })),
+            chapters,
           }
         }),
       )

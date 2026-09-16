@@ -32,6 +32,11 @@ import {
   Play,
   Sparkles,
   X,
+  Search,
+  Atom,
+  FlaskConical,
+  Calculator,
+  ChevronUp,
 } from "lucide-react";
 import "./App.css";
 
@@ -1102,19 +1107,18 @@ function Fees() {
   );
 }
 type StudyFile = { id: string; name: string; size: string };
-type StudySubject = { id: string; name: string; files: StudyFile[] };
+type StudyChapter = { id: string; name: string; files: StudyFile[] };
+type StudySubject = { id: string; name: string; chapters: StudyChapter[] };
 type StudyClass = { id: string; name: string; subjects: StudySubject[] };
+
 function StudyMaterial() {
   const [classes, setClasses] = useState<StudyClass[]>([]);
   const [activeClass, setActiveClass] = useState("");
   const [activeSubject, setActiveSubject] = useState("");
+  const [expandedChapter, setExpandedChapter] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
-  const currentClass = classes.find((c) => c.id === activeClass);
-  const currentSubject = currentClass?.subjects.find(
-    (s) => s.id === activeSubject,
-  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -1124,8 +1128,20 @@ function StudyMaterial() {
         return r.json();
       })
       .then((data: { classes: StudyClass[] }) => {
-        setClasses(data.classes);
-        const first = data.classes[0];
+        // Normalize the API response at ONE appropriate boundary
+        const normalizedClasses = (data.classes || []).map(c => ({
+          ...c,
+          subjects: (c.subjects || []).map(s => ({
+            ...s,
+            chapters: (s.chapters || []).map(ch => ({
+              ...ch,
+              files: ch.files || []
+            }))
+          }))
+        }));
+
+        setClasses(normalizedClasses);
+        const first = normalizedClasses[0];
         if (first) {
           setActiveClass(first.id);
           setActiveSubject(first.subjects[0]?.id || "");
@@ -1138,174 +1154,245 @@ function StudyMaterial() {
     return () => controller.abort();
   }, []);
 
+  const currentClass = classes.find((c) => c.id === activeClass);
+
+  const getSubjectIcon = (name: string) => {
+    const n = name.toLowerCase();
+    if (n.includes("physics")) return <Atom size={24} />;
+    if (n.includes("chemistry")) return <FlaskConical size={24} />;
+    if (n.includes("math")) return <Calculator size={24} />;
+    return <BookOpen size={24} />;
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
+  // Filter logic across subjects, chapters, and files
+  const subjects = currentClass?.subjects ?? [];
+  const filteredSubjects = subjects.map(subject => {
+    if (!searchQuery) return subject;
+    const subjectMatches = subject.name.toLowerCase().includes(searchQuery);
+    
+    const chapters = subject.chapters ?? [];
+    const filteredChapters = chapters.map(chapter => {
+      const chapterMatches = chapter.name.toLowerCase().includes(searchQuery);
+      
+      const files = chapter.files ?? [];
+      const filteredFiles = files.filter(file => file.name.toLowerCase().includes(searchQuery));
+      
+      if (subjectMatches || chapterMatches || filteredFiles.length > 0) {
+        return {
+           ...chapter,
+           files: chapterMatches || subjectMatches ? files : filteredFiles
+        };
+      }
+      return null;
+    }).filter(Boolean) as StudyChapter[];
+
+    if (subjectMatches || filteredChapters.length > 0) {
+      return {
+        ...subject,
+        chapters: filteredChapters
+      }
+    }
+    return null;
+  }).filter(Boolean) as StudySubject[] | undefined;
+
+  const displaySubjects = searchQuery ? filteredSubjects : currentClass?.subjects;
+  const activeDisplaySubject = displaySubjects?.find(s => s.id === activeSubject) || displaySubjects?.[0];
+
   return (
     <>
       <Meta
         title="Study Material"
         description="Browse Quantum Classes notes, practice sets and exam guides by class and subject."
       />
-      <PageHero
-        eyebrow="Study material"
-        title={
-          <>
-            Good preparation
-            <br />
-            <em>needs good tools.</em>
-          </>
-        }
-        description="Download class notes, practice sets and exam guides — organised by class and subject, updated automatically from our Drive."
-      />
-      <section className="section material-page">
-        <div className="sm-layout">
-          {loading && (
-            <>
-              <div className="sm-class-tabs">
-                {Array.from({ length: 4 }, (_, i) => (
-                  <span key={i} className="sm-tab-skeleton" />
-                ))}
-              </div>
-              <div className="sm-subject-tabs">
-                {Array.from({ length: 3 }, (_, i) => (
-                  <span
-                    key={i}
-                    className="sm-tab-skeleton sm-subject-skeleton"
-                  />
-                ))}
-              </div>
-              <div className="sm-cards-grid">
-                {Array.from({ length: 6 }, (_, i) => (
-                  <div key={i} className="sm-card-skeleton" />
-                ))}
-              </div>
-            </>
-          )}
-          {!loading && error && (
-            <div className="gallery-state">
-              <strong>Could not load study material right now.</strong>
-              <span>Please try refreshing the page in a moment.</span>
+      
+      <div className="sm-hero">
+         <div className="sm-hero-content">
+           <h1>QUANTUM<br/>STUDY LIBRARY</h1>
+           <p>Notes, chapters and study material — all in one place.</p>
+           
+           <div className="sm-search-bar">
+             <Search size={20} />
+             <input type="text" placeholder="Search study materials..." value={searchQuery} onChange={handleSearch} />
+           </div>
+         </div>
+      </div>
+
+      <section className="section sm-main">
+        {loading && (
+          <div className="sm-skeleton-container">
+            <div className="sm-skeleton-classes">
+               {Array.from({ length: 4 }).map((_, i) => <span key={i} className="sm-skeleton sm-skel-pill"></span>)}
             </div>
-          )}
-          {!loading && !error && classes.length === 0 && (
-            <div className="gallery-state">
-              <strong>No study material available yet.</strong>
-              <span>
-                PDFs added to the shared Drive folder will appear here
-                automatically.
-              </span>
+            <div className="sm-skeleton-subjects">
+               <div className="sm-skeleton sm-skel-card"></div>
+               <div className="sm-skeleton sm-skel-card"></div>
             </div>
-          )}
-          {!loading && !error && classes.length > 0 && (
-            <>
-              <div
-                className="filter-row sm-class-tabs"
-                role="tablist"
-                aria-label="Select class"
-              >
-                {classes.map((c) => (
-                  <button
-                    key={c.id}
-                    role="tab"
-                    aria-selected={activeClass === c.id}
-                    className={
-                      activeClass === c.id ? "filter active" : "filter"
-                    }
-                    onClick={() => {
-                      setActiveClass(c.id);
-                      setActiveSubject(c.subjects[0]?.id || "");
-                    }}
-                  >
-                    {c.name}
-                  </button>
-                ))}
-              </div>
-              {currentClass &&
-                (currentClass.subjects.length === 0 ? (
-                  <div className="gallery-state sm-state">
-                    <strong>No subjects yet in {currentClass.name}.</strong>
-                    <span>
-                      Add a subject folder to the Drive class folder to get
-                      started.
-                    </span>
-                  </div>
-                ) : (
-                  <>
-                    <div
-                      className="filter-row sm-subject-tabs"
-                      role="tablist"
-                      aria-label="Select subject"
+          </div>
+        )}
+        {!loading && error && (
+          <div className="sm-empty-state">
+             <strong>Could not load study material right now.</strong>
+             <span>Please try refreshing the page in a moment.</span>
+          </div>
+        )}
+        {!loading && !error && classes.length === 0 && (
+           <div className="sm-empty-state">
+             <strong>No study material available yet.</strong>
+             <span>PDFs added to the shared Drive folder will appear here automatically.</span>
+           </div>
+        )}
+
+        {!loading && !error && classes.length > 0 && (
+           <div className="sm-layout">
+             <div className="sm-class-selector">
+                {classes.map((c) => {
+                  const match = c.name.match(/\d+/);
+                  const classNum = match ? match[0].padStart(2, '0') : "ALL";
+                  return (
+                    <button 
+                      key={c.id} 
+                      className={`sm-class-pill ${activeClass === c.id ? 'active' : ''}`}
+                      onClick={() => {
+                        setActiveClass(c.id);
+                        setActiveSubject(c.subjects[0]?.id || "");
+                        setSearchQuery("");
+                      }}
                     >
-                      {currentClass.subjects.map((s) => (
-                        <button
-                          key={s.id}
-                          role="tab"
-                          aria-selected={activeSubject === s.id}
-                          className={
-                            activeSubject === s.id ? "filter active" : "filter"
-                          }
-                          onClick={() => setActiveSubject(s.id)}
-                        >
-                          {s.name}
-                        </button>
-                      ))}
-                    </div>
-                    {currentSubject &&
-                      (currentSubject.files.length === 0 ? (
-                        <div className="gallery-state sm-state">
-                          <strong>No PDFs yet in {currentSubject.name}.</strong>
-                          <span>
-                            Upload PDF files to the Drive subject folder and
-                            they will appear here.
-                          </span>
+                      <strong>{classNum}</strong>
+                      <span>CLASS</span>
+                    </button>
+                  );
+                })}
+             </div>
+             
+             {currentClass && (
+                <div className="sm-content-area">
+                   <div className="sm-breadcrumb">
+                      HOME / {currentClass.name.toUpperCase()} {activeDisplaySubject && !searchQuery ? `/ ${activeDisplaySubject.name.toUpperCase()}` : ''}
+                   </div>
+                   
+                   {(!displaySubjects || displaySubjects.length === 0) ? (
+                      <div className="sm-empty-state">
+                         <strong>{searchQuery ? "No study material found." : "No subjects available for this class yet."}</strong>
+                      </div>
+                   ) : (
+                      <>
+                        <div className="sm-subject-cards">
+                           {displaySubjects.map(s => (
+                              <button 
+                                key={s.id} 
+                                className={`sm-subject-card ${activeSubject === s.id && !searchQuery ? 'active' : ''}`}
+                                onClick={() => {
+                                  setActiveSubject(s.id);
+                                  if(searchQuery) setSearchQuery("");
+                                }}
+                              >
+                                 <div className="sm-subject-icon">{getSubjectIcon(s.name)}</div>
+                                 <div className="sm-subject-info">
+                                    <h3>{s.name.toUpperCase()}</h3>
+                                    <span>{s.chapters?.length || 0} CHAPTERS</span>
+                                 </div>
+                                 <div className="sm-subject-action">OPEN SUBJECT &rarr;</div>
+                              </button>
+                           ))}
                         </div>
-                      ) : (
-                        <div className="sm-cards-grid">
-                          {currentSubject.files.map((file) => (
-                            <div className="sm-card" key={file.id}>
-                              <div className="sm-card-icon">
-                                <FileText size={32} />
-                              </div>
-                              <div className="sm-card-body">
-                                <strong className="sm-card-title">
-                                  {file.name}
-                                </strong>
-                                {file.size && (
-                                  <span className="sm-card-size">
-                                    PDF · {file.size}
-                                  </span>
-                                )}
-                              </div>
-                              <div className="sm-card-actions">
-                                <a
-                                  className="sm-btn sm-btn-view"
-                                  href={`/api/study-material/file/${file.id}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <ExternalLink size={13} />
-                                  View
-                                </a>
-                                <a
-                                  className="sm-btn sm-btn-download"
-                                  href={`/api/study-material/file/${file.id}?download=1`}
-                                  download
-                                >
-                                  <Download size={13} />
-                                  Download
-                                </a>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ))}
-                  </>
-                ))}
-            </>
-          )}
-        </div>
+                        
+                        {(activeDisplaySubject && !searchQuery) || searchQuery ? (
+                           <div className="sm-chapters-list">
+                              <h3 className="sm-chapters-title">
+                                {searchQuery ? "Search Results" : `${activeDisplaySubject?.name.toUpperCase()} CHAPTERS`}
+                              </h3>
+                              {searchQuery ? (
+                                 displaySubjects.map(s => (
+                                    (s.chapters || []).map((ch, idx) => (
+                                       <ChapterCard 
+                                         key={ch.id} 
+                                         chapter={ch} 
+                                         index={idx}
+                                         expanded={expandedChapter === ch.id || !!searchQuery}
+                                         onToggle={() => setExpandedChapter(expandedChapter === ch.id ? "" : ch.id)}
+                                         subjectName={s.name}
+                                       />
+                                    ))
+                                 ))
+                              ) : (
+                                 (activeDisplaySubject?.chapters?.length || 0) === 0 ? (
+                                    <div className="sm-empty-state">
+                                      <strong>No chapters available yet.</strong>
+                                    </div>
+                                 ) : (
+                                    (activeDisplaySubject?.chapters || []).map((ch, idx) => (
+                                       <ChapterCard 
+                                         key={ch.id} 
+                                         chapter={ch} 
+                                         index={idx}
+                                         expanded={expandedChapter === ch.id}
+                                         onToggle={() => setExpandedChapter(expandedChapter === ch.id ? "" : ch.id)}
+                                       />
+                                    ))
+                                 )
+                              )}
+                           </div>
+                        ) : null}
+                      </>
+                   )}
+                </div>
+             )}
+           </div>
+        )}
       </section>
       <EnquiryCTA />
     </>
   );
+}
+
+function ChapterCard({ chapter, index, expanded, onToggle, subjectName }: { chapter: StudyChapter, index: number, expanded: boolean, onToggle: () => void, subjectName?: string }) {
+   const num = String(index + 1).padStart(2, '0');
+   return (
+     <div className={`sm-chapter-card ${expanded ? 'expanded' : ''}`}>
+       <button className="sm-chapter-header" onClick={onToggle}>
+         <div className="sm-chapter-number">{num}</div>
+         <div className="sm-chapter-info">
+            <span className="sm-chapter-label">{subjectName ? `${subjectName.toUpperCase()} - CHAPTER ${index + 1}` : `CHAPTER ${index + 1}`}</span>
+            <h4>{chapter.name}</h4>
+         </div>
+         <div className="sm-chapter-meta">
+            <span>{chapter.files?.length || 0} STUDY MATERIALS</span>
+            <span className="sm-chapter-toggle">
+               {expanded ? <ChevronUp size={18} /> : <span className="sm-chapter-view">VIEW &rarr;</span>}
+            </span>
+         </div>
+       </button>
+       
+       {expanded && (
+         <div className="sm-chapter-body">
+            {(chapter.files?.length || 0) === 0 ? (
+               <div className="sm-empty-state small">No PDFs available in this chapter yet.</div>
+            ) : (
+               <div className="sm-pdf-list">
+                 {(chapter.files || []).map(file => (
+                    <div className="sm-pdf-card" key={file.id}>
+                       <div className="sm-pdf-icon"><FileText size={22} /></div>
+                       <div className="sm-pdf-info">
+                          <strong title={file.name}>{file.name}</strong>
+                          {file.size && <span>PDF &middot; {file.size}</span>}
+                       </div>
+                       <div className="sm-pdf-actions">
+                          <a href={`/api/study-material/file/${file.id}`} target="_blank" rel="noopener noreferrer" className="sm-btn sm-btn-view"><ExternalLink size={14}/> VIEW</a>
+                          <a href={`/api/study-material/file/${file.id}?download=1`} download className="sm-btn sm-btn-download"><Download size={14}/> DOWNLOAD</a>
+                       </div>
+                    </div>
+                 ))}
+               </div>
+            )}
+         </div>
+       )}
+     </div>
+   );
 }
 function About() {
   return (
