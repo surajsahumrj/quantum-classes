@@ -28,9 +28,10 @@ app.get('/api/gallery/image/:fileId', async (request, response) => {
   }
 })
 
-app.get('/api/study-material', async (_request, response) => {
+app.get('/api/study-material', async (request, response) => {
   try {
-    return response.status(200).json(await getStudyMaterial())
+    const bypassCache = request.query.refresh === '1'
+    return response.status(200).json(await getStudyMaterial({ bypassCache }))
   } catch (error) {
     console.error('Study material API error:', error)
     return response.status(500).json({ error: 'Study material is temporarily unavailable.' })

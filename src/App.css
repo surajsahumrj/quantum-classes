@@ -2870,9 +2870,10 @@ footer {
 
 .sm-pdf-list {
     margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 12px;
+    width: 100%;
 }
 
 .sm-pdf-card {
@@ -2883,6 +2884,8 @@ footer {
     background: white;
     border: 1px solid var(--line);
     border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .sm-pdf-icon {
@@ -2994,25 +2997,30 @@ footer {
     .sm-content-area {
         padding: 15px;
     }
+
     .sm-chapter-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
     }
+
     .sm-chapter-meta {
         width: 100%;
         justify-content: space-between;
     }
+
     .sm-pdf-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .sm-pdf-actions {
         flex-direction: row;
-        width: 100%;
+        align-items: center;
     }
+
+    .sm-pdf-actions {
+        flex-direction: column;
+        width: auto;
+    }
+
     .sm-pdf-actions .sm-btn {
-        flex: 1;
+        flex: none;
         justify-content: center;
     }
 }

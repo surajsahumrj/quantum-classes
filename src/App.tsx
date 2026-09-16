@@ -1235,7 +1235,7 @@ function StudyMaterial() {
         )}
         {!loading && error && (
           <div className="sm-empty-state">
-             <strong>Could not load study material right now.</strong>
+             <strong>Unable to load study material. Please try again.</strong>
              <span>Please try refreshing the page in a moment.</span>
           </div>
         )}
@@ -1294,7 +1294,7 @@ function StudyMaterial() {
                                  <div className="sm-subject-icon">{getSubjectIcon(s.name)}</div>
                                  <div className="sm-subject-info">
                                     <h3>{s.name.toUpperCase()}</h3>
-                                    <span>{s.chapters?.length || 0} CHAPTERS</span>
+                                    <span>{(s.chapters?.length || 0) === 1 ? "1 CHAPTER" : (s.chapters?.length || 0) + " CHAPTERS"}</span>
                                  </div>
                                  <div className="sm-subject-action">OPEN SUBJECT &rarr;</div>
                               </button>

@@ -46,8 +46,9 @@ function formatSize(bytes) {
   return `${n} B`
 }
 
-export async function getStudyMaterial() {
-  if (studyMaterialCache.data && studyMaterialCache.expiresAt > Date.now()) {
+export async function getStudyMaterial(options = {}) {
+  const bypassCache = options.bypassCache === true
+  if (!bypassCache && studyMaterialCache.data && studyMaterialCache.expiresAt > Date.now()) {
     return studyMaterialCache.data
   }
 
@@ -60,6 +61,7 @@ export async function getStudyMaterial() {
     `'${rootFolderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
     'id,name',
   )
+  console.log(`[Drive Discovery] Root folder: ${rootFolderId}, found ${classFolders.length} class folders: ${classFolders.map(c => c.name).join(', ')}`)
 
   const classes = await Promise.all(
     classFolders.map(async (classFolder) => {
@@ -69,6 +71,7 @@ export async function getStudyMaterial() {
         `'${classFolder.id}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
         'id,name',
       )
+      console.log(`[Drive Discovery] Class "${classFolder.name}" (${classFolder.id}): found ${subjectFolders.length} subject folders: ${subjectFolders.map(s => s.name).join(', ')}`)
 
       const subjects = await Promise.all(
         subjectFolders.map(async (subjectFolder) => {
@@ -78,6 +81,7 @@ export async function getStudyMaterial() {
             `'${subjectFolder.id}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
             'id,name',
           )
+          console.log(`[Drive Discovery] Subject "${subjectFolder.name}" (${subjectFolder.id}): found ${chapterFolders.length} chapter folders: ${chapterFolders.map(ch => ch.name).join(', ')}`)
 
           const chapters = await Promise.all(
             chapterFolders.map(async (chapterFolder) => {
@@ -87,13 +91,16 @@ export async function getStudyMaterial() {
                 `'${chapterFolder.id}' in parents and mimeType = 'application/pdf' and trashed = false`,
                 'id,name,size',
               )
+              console.log(`[Drive Discovery] Chapter "${chapterFolder.name}" (${chapterFolder.id}): found ${files.length} PDFs`)
 
               return {
                 id: chapterFolder.id,
                 name: chapterFolder.name,
+                mimeType: 'application/vnd.google-apps.folder',
                 files: files.map((f) => ({
                   id: f.id,
                   name: f.name.replace(/\.pdf$/i, '').trim(),
+                  mimeType: 'application/pdf',
                   size: formatSize(f.size),
                 })),
               }
@@ -103,6 +110,7 @@ export async function getStudyMaterial() {
           return {
             id: subjectFolder.id,
             name: subjectFolder.name,
+            mimeType: 'application/vnd.google-apps.folder',
             chapters,
           }
         }),
@@ -111,6 +119,7 @@ export async function getStudyMaterial() {
       return {
         id: classFolder.id,
         name: classFolder.name,
+        mimeType: 'application/vnd.google-apps.folder',
         subjects,
       }
     }),
