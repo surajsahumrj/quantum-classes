@@ -1972,6 +1972,34 @@ footer {
     border-color: #a5d1cb
 }
 
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: flex-start;
+  gap: 18px;
+  color: #fff;
+  text-align: left;
+}
+
+
+.footer-brand-name {
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+.footer-brand-logo {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+    
+}
+
 .footer-top>p {
     color: #d3e3df;
     font: 18px/1.6 var(--serif)
@@ -2385,6 +2413,20 @@ footer {
 
     .contact-details {
         width: 100%
+    }
+
+    .footer-brand {
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-brand-logo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .footer-brand-name {
+        font-size: 20px;
     }
 }
 

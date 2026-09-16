@@ -204,7 +204,13 @@ function Footer() {
   return (
     <footer>
       <div className="container footer-top">
-        <Brand />
+        <div className="footer-brand">
+          <img
+            className="footer-brand-logo"
+            src="/logo.jpg"
+            alt="Quantum Classes logo"
+          />
+        </div>
 
         <div className="footer-links">
           <div>
@@ -1156,7 +1162,10 @@ type StudyFile = { id: string; name: string; size: string };
 type StudyChapter = { id: string; name: string; files: StudyFile[] };
 type StudySubject = { id: string; name: string; chapters: StudyChapter[] };
 type StudyClass = { id: string; name: string; subjects: StudySubject[] };
-type StudySearchResult = StudyChapter & { className: string; subjectName: string };
+type StudySearchResult = StudyChapter & {
+  className: string;
+  subjectName: string;
+};
 
 const normalizeSearchText = (value: string) =>
   value.toLowerCase().trim().replace(/\s+/g, " ");
