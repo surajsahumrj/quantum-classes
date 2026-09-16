@@ -1100,12 +1100,14 @@ function Fees() {
                   ]) => (
                     <tr key={batch}>
                       <td className="fee-name">{batch}</td>
-                      <td className="fee-amount">{monthly}</td>
-                      <td className="fee-amount">
+                      <td className="fee-amount" data-th="Monthly">
+                        {monthly}
+                      </td>
+                      <td className="fee-amount" data-th="Half-Yearly (6 Months)">
                         <span>{halfYearly}</span>
                         <small className="discount-badge">{halfDiscount}</small>
                       </td>
-                      <td className="fee-amount">
+                      <td className="fee-amount" data-th="Yearly (11 Months)">
                         <span>{yearly}</span>
                         <small className="discount-badge">
                           {yearlyDiscount}
