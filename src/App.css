@@ -2415,6 +2415,147 @@ footer {
         width: 100%
     }
 
+    .about-image {
+        height: 280px
+    }
+
+    .breadcrumbs {
+        flex-wrap: wrap
+    }
+
+    /* Reserve room so the fixed WhatsApp button never sits on top of the
+       last line of footer content. */
+    footer {
+        padding-bottom: 92px
+    }
+}
+
+/* ==========================================================================
+   PHONE REFINEMENTS (320px–480px)
+   Tighter type scale, single-column footer, comfortable touch targets.
+   Builds on the 700px breakpoint above rather than replacing it.
+   ========================================================================== */
+@media(max-width:480px) {
+    h1 {
+        font-size: clamp(30px, 9vw, 38px);
+        line-height: 1.15;
+    }
+
+    h2 {
+        font-size: clamp(24px, 7.5vw, 30px);
+        line-height: 1.2;
+    }
+
+    h3 {
+        font-size: clamp(17px, 5.5vw, 20px);
+    }
+
+    .page-hero h1 {
+        font-size: clamp(28px, 8.5vw, 34px);
+        margin: 14px 0 12px;
+    }
+
+    .sm-hero h1 {
+        font-size: 30px;
+        letter-spacing: 0.02em;
+    }
+
+    .compact-cta h2 {
+        font-size: clamp(26px, 8vw, 32px);
+    }
+
+    /* Logo stays visible, but the brand block shrinks enough that the
+       hamburger button keeps its full tap target and right-edge margin
+       instead of being squeezed against the viewport edge. */
+    .brand-logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    .brand-name {
+        font-size: 14px;
+    }
+
+    .brand {
+        gap: 8px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .socials a,
+    .contact-socials a {
+        width: 42px;
+        height: 42px;
+    }
+
+    /* Fee table becomes a stacked list of cards instead of a wide table,
+       so there is nothing to scroll horizontally. */
+    .fee-table-wrap {
+        overflow-x: visible;
+    }
+
+    .pricing-table {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .pricing-table thead {
+        display: none;
+    }
+
+    .pricing-table,
+    .pricing-table tbody,
+    .pricing-table tr,
+    .pricing-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .pricing-table tr {
+        background: #fff;
+        margin-bottom: 12px;
+        padding: 16px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(11, 79, 85, .06);
+    }
+
+    .pricing-table tr:last-child {
+        margin-bottom: 0;
+    }
+
+    .pricing-table td {
+        border-top: 0;
+        padding: 7px 0;
+        background: transparent;
+    }
+
+    .pricing-table td.fee-name {
+        font-size: 17px;
+        padding: 0 0 12px;
+        margin-bottom: 6px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .pricing-table td.fee-amount {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        text-align: left;
+    }
+
+    .pricing-table td.fee-amount::before {
+        content: attr(data-th);
+        margin-right: auto;
+        color: #84908e;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+    }
+
     .footer-brand {
         align-items: center;
         text-align: center;
@@ -3198,18 +3339,26 @@ footer {
     }
 
     .sm-pdf-card {
-        flex-direction: row;
-        align-items: center;
+        flex-wrap: wrap;
     }
 
+    /* The filename + icon stay together on their own line (flex-wrap above);
+       View/Download drop to a full-width second row instead of squeezing
+       into a narrow column beside the name, which used to truncate long
+       filenames down to a couple of characters. */
     .sm-pdf-actions {
-        flex-direction: column;
-        width: auto;
+        flex: 1 1 100%;
+        flex-direction: row;
+        width: 100%;
+        gap: 10px;
+        margin-top: 2px;
     }
 
     .sm-pdf-actions .sm-btn {
-        flex: none;
+        flex: 1;
         justify-content: center;
+        padding: 10px 12px;
+        font-size: 11px;
     }
 }
 
