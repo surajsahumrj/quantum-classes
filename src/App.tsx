@@ -1109,7 +1109,10 @@ function Fees() {
                       <td className="fee-amount" data-th="Monthly">
                         {monthly}
                       </td>
-                      <td className="fee-amount" data-th="Half-Yearly (6 Months)">
+                      <td
+                        className="fee-amount"
+                        data-th="Half-Yearly (6 Months)"
+                      >
                         <span>{halfYearly}</span>
                         <small className="discount-badge">{halfDiscount}</small>
                       </td>
@@ -1899,7 +1902,7 @@ function Gallery() {
             <em>Quantum Classes.</em>
           </>
         }
-        description="Explore moments from our classrooms, events, students, results and campus. Categories update automatically from our Google Drive gallery."
+        description="Explore our gallery and experience the vibrant life of our institute through memorable moments captured across classrooms, academic events, student activities, celebrations, and campus experiences."
       />
       <section className="section gallery-page">
         <div className="container">

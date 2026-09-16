@@ -3561,7 +3561,21 @@ html {
 }
 
 .teaser-card:hover {
+    transform: translateY(-4px);
+    background: var(--teal);
+    color: #fff;
     box-shadow: 0 12px 34px rgba(11, 79, 85, 0.13);
+}
+
+.teaser-card:hover h3,
+.teaser-card:hover p,
+.teaser-card:hover span,
+.teaser-card:hover small {
+    color: #fff;
+}
+
+.teaser-card:hover svg {
+    color: var(--gold);
 }
 
 .social-feed-grid>a {
