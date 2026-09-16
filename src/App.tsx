@@ -1156,6 +1156,10 @@ type StudyFile = { id: string; name: string; size: string };
 type StudyChapter = { id: string; name: string; files: StudyFile[] };
 type StudySubject = { id: string; name: string; chapters: StudyChapter[] };
 type StudyClass = { id: string; name: string; subjects: StudySubject[] };
+type StudySearchResult = StudyChapter & { className: string; subjectName: string };
+
+const normalizeSearchText = (value: string) =>
+  value.toLowerCase().trim().replace(/\s+/g, " ");
 
 function StudyMaterial() {
   const [classes, setClasses] = useState<StudyClass[]>([]);
@@ -1211,51 +1215,50 @@ function StudyMaterial() {
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value.toLowerCase());
+    setSearchQuery(e.target.value);
   };
 
-  // Filter logic across subjects, chapters, and files
-  const subjects = currentClass?.subjects ?? [];
-  const filteredSubjects = subjects
-    .map((subject) => {
-      if (!searchQuery) return subject;
-      const subjectMatches = subject.name.toLowerCase().includes(searchQuery);
+  const normalizedQuery = normalizeSearchText(searchQuery);
+  const isSearching = normalizedQuery.length > 0;
 
-      const chapters = subject.chapters ?? [];
-      const filteredChapters = chapters
-        .map((chapter) => {
-          const chapterMatches = chapter.name
-            .toLowerCase()
-            .includes(searchQuery);
+  // Search dynamically across every already-loaded class → subject → chapter →
+  // file, not just the currently selected class. A match at a higher level
+  // (class/subject/chapter name) pulls in everything nested under it; a match
+  // on a file name alone only pulls in that file.
+  const searchResults: StudySearchResult[] = isSearching
+    ? classes.flatMap((cls) => {
+        const classMatches = normalizeSearchText(cls.name).includes(
+          normalizedQuery,
+        );
+        return (cls.subjects ?? []).flatMap((subject) => {
+          const subjectMatches =
+            classMatches ||
+            normalizeSearchText(subject.name).includes(normalizedQuery);
+          return (subject.chapters ?? []).flatMap((chapter) => {
+            const chapterMatches =
+              subjectMatches ||
+              normalizeSearchText(chapter.name).includes(normalizedQuery);
+            const files = chapter.files ?? [];
+            const matchedFiles = chapterMatches
+              ? files
+              : files.filter((file) =>
+                  normalizeSearchText(file.name).includes(normalizedQuery),
+                );
+            if (!chapterMatches && matchedFiles.length === 0) return [];
+            return [
+              {
+                ...chapter,
+                files: matchedFiles,
+                className: cls.name,
+                subjectName: subject.name,
+              },
+            ];
+          });
+        });
+      })
+    : [];
 
-          const files = chapter.files ?? [];
-          const filteredFiles = files.filter((file) =>
-            file.name.toLowerCase().includes(searchQuery),
-          );
-
-          if (subjectMatches || chapterMatches || filteredFiles.length > 0) {
-            return {
-              ...chapter,
-              files: chapterMatches || subjectMatches ? files : filteredFiles,
-            };
-          }
-          return null;
-        })
-        .filter(Boolean) as StudyChapter[];
-
-      if (subjectMatches || filteredChapters.length > 0) {
-        return {
-          ...subject,
-          chapters: filteredChapters,
-        };
-      }
-      return null;
-    })
-    .filter(Boolean) as StudySubject[] | undefined;
-
-  const displaySubjects = searchQuery
-    ? filteredSubjects
-    : currentClass?.subjects;
+  const displaySubjects = currentClass?.subjects;
   const activeDisplaySubject =
     displaySubjects?.find((s) => s.id === activeSubject) ||
     displaySubjects?.[0];
@@ -1345,19 +1348,43 @@ function StudyMaterial() {
               {currentClass && (
                 <div className="sm-content-area">
                   <div className="sm-breadcrumb">
-                    HOME / {currentClass.name.toUpperCase()}{" "}
-                    {activeDisplaySubject && !searchQuery
-                      ? `/ ${activeDisplaySubject.name.toUpperCase()}`
-                      : ""}
+                    {isSearching
+                      ? "HOME / SEARCH RESULTS"
+                      : `HOME / ${currentClass.name.toUpperCase()}${activeDisplaySubject ? ` / ${activeDisplaySubject.name.toUpperCase()}` : ""}`}
                   </div>
 
-                  {!displaySubjects || displaySubjects.length === 0 ? (
+                  {isSearching ? (
+                    <div className="sm-chapters-list">
+                      <h3 className="sm-chapters-title">
+                        Search Results
+                        {searchResults.length > 0
+                          ? ` (${searchResults.length})`
+                          : ""}
+                      </h3>
+                      {searchResults.length === 0 ? (
+                        <div className="sm-empty-state">
+                          <strong>No study materials found.</strong>
+                          <span>
+                            Try a different class, subject, chapter or file
+                            name.
+                          </span>
+                        </div>
+                      ) : (
+                        searchResults.map((result, idx) => (
+                          <ChapterCard
+                            key={result.id}
+                            chapter={result}
+                            index={idx}
+                            expanded
+                            onToggle={() => {}}
+                            subjectName={`${result.className} · ${result.subjectName}`}
+                          />
+                        ))
+                      )}
+                    </div>
+                  ) : !displaySubjects || displaySubjects.length === 0 ? (
                     <div className="sm-empty-state">
-                      <strong>
-                        {searchQuery
-                          ? "No study material found."
-                          : "No subjects available for this class yet."}
-                      </strong>
+                      <strong>No subjects available for this class yet.</strong>
                     </div>
                   ) : (
                     <>
@@ -1365,11 +1392,8 @@ function StudyMaterial() {
                         {displaySubjects.map((s) => (
                           <button
                             key={s.id}
-                            className={`sm-subject-card ${activeSubject === s.id && !searchQuery ? "active" : ""}`}
-                            onClick={() => {
-                              setActiveSubject(s.id);
-                              if (searchQuery) setSearchQuery("");
-                            }}
+                            className={`sm-subject-card ${activeSubject === s.id ? "active" : ""}`}
+                            onClick={() => setActiveSubject(s.id)}
                           >
                             <div className="sm-subject-icon">
                               {getSubjectIcon(s.name)}
@@ -1389,39 +1413,18 @@ function StudyMaterial() {
                         ))}
                       </div>
 
-                      {(activeDisplaySubject && !searchQuery) || searchQuery ? (
+                      {activeDisplaySubject && (
                         <div className="sm-chapters-list">
                           <h3 className="sm-chapters-title">
-                            {searchQuery
-                              ? "Search Results"
-                              : `${activeDisplaySubject?.name.toUpperCase()} CHAPTERS`}
+                            {activeDisplaySubject.name.toUpperCase()} CHAPTERS
                           </h3>
-                          {searchQuery ? (
-                            displaySubjects.map((s) =>
-                              (s.chapters || []).map((ch, idx) => (
-                                <ChapterCard
-                                  key={ch.id}
-                                  chapter={ch}
-                                  index={idx}
-                                  expanded={
-                                    expandedChapter === ch.id || !!searchQuery
-                                  }
-                                  onToggle={() =>
-                                    setExpandedChapter(
-                                      expandedChapter === ch.id ? "" : ch.id,
-                                    )
-                                  }
-                                  subjectName={s.name}
-                                />
-                              )),
-                            )
-                          ) : (activeDisplaySubject?.chapters?.length || 0) ===
-                            0 ? (
+                          {(activeDisplaySubject.chapters?.length || 0) ===
+                          0 ? (
                             <div className="sm-empty-state">
                               <strong>No chapters available yet.</strong>
                             </div>
                           ) : (
-                            (activeDisplaySubject?.chapters || []).map(
+                            (activeDisplaySubject.chapters || []).map(
                               (ch, idx) => (
                                 <ChapterCard
                                   key={ch.id}
@@ -1438,7 +1441,7 @@ function StudyMaterial() {
                             )
                           )}
                         </div>
-                      ) : null}
+                      )}
                     </>
                   )}
                 </div>
