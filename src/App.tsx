@@ -268,9 +268,15 @@ function Footer() {
       </div>
       <div className="container footer-bottom">
         <span>© 2026 Quantum Classes. All rights reserved.</span>
-        <span><a href="https://surajsahumrj.netlify.app" target="_blank" rel="noopener noreferrer">
-          Created with ❤️ by Suraj Sahu
-        </a></span>
+        <span>
+          <a
+            href="https://surajsahumrj.netlify.app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Created with ❤️ by Suraj Sahu
+          </a>
+        </span>
       </div>
     </footer>
   );
@@ -838,73 +844,74 @@ function Home() {
         description="Quantum Classes helps students build clear concepts, confidence and strong exam results."
       />
       <section className="hero-section">
-       <div className="container hero-grid">
-        <div className="hero-copy">
-          <div className="eyebrow">
-            <span className="eyebrow-dot" /> Trusted by 100+ families since 2025
-          </div>
-          <h1>
-            Learning that
-            <br />
-            <em>moves you forward.</em>
-          </h1>
-          <p className="hero-lede">
-            A focused, thoughtful approach to school and competitive exam
-            preparation. Where strong fundamentals become confident futures.
-          </p>
-          <div className="hero-actions">
-            <Link className="button button-primary" to="/enquiry">
-              Book a free demo <ArrowRight size={17} />
-            </Link>
-            <Link className="button button-text" to="/courses">
-              <span className="play-icon">
-                <Play size={12} fill="currentColor" />
-              </span>{" "}
-              Explore programmes
-            </Link>
-          </div>
-          <div className="hero-proof">
-            <div className="avatars">
-              <span>AK</span>
-              <span>SR</span>
-              <span>PM</span>
-              <span>+</span>
+        <div className="container hero-grid">
+          <div className="hero-copy">
+            <div className="eyebrow">
+              <span className="eyebrow-dot" /> Trusted by 100+ families since
+              2025
             </div>
-            <p>
-              <strong>92% of students</strong>
+            <h1>
+              Learning that
               <br />
-              improve by 2+ grades
+              <em>moves you forward.</em>
+            </h1>
+            <p className="hero-lede">
+              A focused, thoughtful approach to school and competitive exam
+              preparation. Where strong fundamentals become confident futures.
             </p>
+            <div className="hero-actions">
+              <Link className="button button-primary" to="/enquiry">
+                Book a free demo <ArrowRight size={17} />
+              </Link>
+              <Link className="button button-text" to="/courses">
+                <span className="play-icon">
+                  <Play size={12} fill="currentColor" />
+                </span>{" "}
+                Explore programmes
+              </Link>
+            </div>
+            <div className="hero-proof">
+              <div className="avatars">
+                <span>AK</span>
+                <span>SR</span>
+                <span>PM</span>
+                <span>+</span>
+              </div>
+              <p>
+                <strong>92% of students</strong>
+                <br />
+                improve by 2+ grades
+              </p>
+            </div>
+          </div>
+          <div className="hero-visual">
+            <div className="hero-image-wrap">
+              <img
+                src="/home.png"
+                alt="Students studying together in a bright classroom"
+              />
+              <div className="image-wash" />
+            </div>
+            <div className="hero-note">
+              <span className="note-icon">
+                <Sparkles size={16} />
+              </span>
+              <span>
+                <b>Small courses.</b>
+                <br />
+                Real attention.
+              </span>
+            </div>
+            <div className="hero-stamp">
+              <strong>1+</strong>
+              <span>
+                years of
+                <br />
+                excellence
+              </span>
+            </div>
           </div>
         </div>
-        <div className="hero-visual">
-          <div className="hero-image-wrap">
-            <img
-              src="/home.png"
-              alt="Students studying together in a bright classroom"
-            />
-            <div className="image-wash" />
-          </div>
-          <div className="hero-note">
-            <span className="note-icon">
-              <Sparkles size={16} />
-            </span>
-            <span>
-              <b>Small courses.</b>
-              <br />
-              Real attention.
-            </span>
-          </div>
-          <div className="hero-stamp">
-            <strong>1+</strong>
-            <span>
-              years of
-              <br />
-              excellence
-            </span>
-          </div>
-        </div>
-       </div>
       </section>
       <Stats />
       <GalleryStrip />
@@ -920,8 +927,8 @@ function Home() {
               </h2>
             </div>
             <p>
-              Four focused batch names, clear class ranges and timings that
-              keep learning consistent.
+              Four focused batch names, clear class ranges and timings that keep
+              learning consistent.
             </p>
           </div>
           <div className="teaser-cards batch-teaser-cards">
@@ -1070,73 +1077,76 @@ function Fees() {
         description="Straightforward plans for every Quantum Classes batch, with savings for longer commitments."
       />
       <section className="section fee-page">
-       <div className="container">
-        <div className="fee-table-wrap">
-          <table className="pricing-table">
-            <thead>
-              <tr>
-                <th>Batch</th>
-                <th>Monthly</th>
-                <th>Half-Yearly (6 Months)</th>
-                <th>Yearly (11 Months)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fees.map(
-                ([
-                  batch,
-                  monthly,
-                  halfYearly,
-                  halfDiscount,
-                  yearly,
-                  yearlyDiscount,
-                ]) => (
-                  <tr key={batch}>
-                    <td className="fee-name">{batch}</td>
-                    <td className="fee-amount">{monthly}</td>
-                    <td className="fee-amount">
-                      <span>{halfYearly}</span>
-                      <small className="discount-badge">{halfDiscount}</small>
-                    </td>
-                    <td className="fee-amount">
-                      <span>{yearly}</span>
-                      <small className="discount-badge">{yearlyDiscount}</small>
-                    </td>
-                  </tr>
-                ),
-              )}
-            </tbody>
-          </table>
+        <div className="container">
+          <div className="fee-table-wrap">
+            <table className="pricing-table">
+              <thead>
+                <tr>
+                  <th>Batch</th>
+                  <th>Monthly</th>
+                  <th>Half-Yearly (6 Months)</th>
+                  <th>Yearly (11 Months)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fees.map(
+                  ([
+                    batch,
+                    monthly,
+                    halfYearly,
+                    halfDiscount,
+                    yearly,
+                    yearlyDiscount,
+                  ]) => (
+                    <tr key={batch}>
+                      <td className="fee-name">{batch}</td>
+                      <td className="fee-amount">{monthly}</td>
+                      <td className="fee-amount">
+                        <span>{halfYearly}</span>
+                        <small className="discount-badge">{halfDiscount}</small>
+                      </td>
+                      <td className="fee-amount">
+                        <span>{yearly}</span>
+                        <small className="discount-badge">
+                          {yearlyDiscount}
+                        </small>
+                      </td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+          </div>
+          <section className="fee-benefits">
+            <h2>Additional Fee Benefits</h2>
+            <div className="benefit-list">
+              <p>
+                <Check size={16} /> 10% extra discount for siblings (same
+                parents)
+              </p>
+              <p>
+                <Check size={16} /> 15% extra discount for batch toppers
+              </p>
+              <p>
+                <Check size={16} /> Free study material — PDFs, Notes, DPP, etc.
+              </p>
+            </div>
+            <div className="policy-list">
+              <p>
+                <span className="info-icon">i</span> Monthly fee should be
+                submitted between the 1st and 5th of the respective month, in
+                advance
+              </p>
+              <p>
+                <span className="info-icon">i</span> Refund policy available
+              </p>
+            </div>
+            <Link className="under-link" to="/contact">
+              Have questions about fees or refunds? Contact us{" "}
+              <ArrowRight size={15} />
+            </Link>
+          </section>
         </div>
-        <section className="fee-benefits">
-          <h2>Additional Fee Benefits</h2>
-          <div className="benefit-list">
-            <p>
-              <Check size={16} /> 10% extra discount for siblings (same parents)
-            </p>
-            <p>
-              <Check size={16} /> 15% extra discount for batch toppers
-            </p>
-            <p>
-              <Check size={16} /> Free study material — PDFs, Notes, DPP, etc.
-            </p>
-          </div>
-          <div className="policy-list">
-            <p>
-              <span className="info-icon">i</span> Monthly fee should be
-              submitted between the 1st and 5th of the respective month, in
-              advance
-            </p>
-            <p>
-              <span className="info-icon">i</span> Refund policy available
-            </p>
-          </div>
-          <Link className="under-link" to="/contact">
-            Have questions about fees or refunds? Contact us{" "}
-            <ArrowRight size={15} />
-          </Link>
-        </section>
-       </div>
       </section>
       <EnquiryCTA />
     </>
@@ -1165,15 +1175,15 @@ function StudyMaterial() {
       })
       .then((data: { classes: StudyClass[] }) => {
         // Normalize the API response at ONE appropriate boundary
-        const normalizedClasses = (data.classes || []).map(c => ({
+        const normalizedClasses = (data.classes || []).map((c) => ({
           ...c,
-          subjects: (c.subjects || []).map(s => ({
+          subjects: (c.subjects || []).map((s) => ({
             ...s,
-            chapters: (s.chapters || []).map(ch => ({
+            chapters: (s.chapters || []).map((ch) => ({
               ...ch,
-              files: ch.files || []
-            }))
-          }))
+              files: ch.files || [],
+            })),
+          })),
         }));
 
         setClasses(normalizedClasses);
@@ -1206,37 +1216,49 @@ function StudyMaterial() {
 
   // Filter logic across subjects, chapters, and files
   const subjects = currentClass?.subjects ?? [];
-  const filteredSubjects = subjects.map(subject => {
-    if (!searchQuery) return subject;
-    const subjectMatches = subject.name.toLowerCase().includes(searchQuery);
+  const filteredSubjects = subjects
+    .map((subject) => {
+      if (!searchQuery) return subject;
+      const subjectMatches = subject.name.toLowerCase().includes(searchQuery);
 
-    const chapters = subject.chapters ?? [];
-    const filteredChapters = chapters.map(chapter => {
-      const chapterMatches = chapter.name.toLowerCase().includes(searchQuery);
+      const chapters = subject.chapters ?? [];
+      const filteredChapters = chapters
+        .map((chapter) => {
+          const chapterMatches = chapter.name
+            .toLowerCase()
+            .includes(searchQuery);
 
-      const files = chapter.files ?? [];
-      const filteredFiles = files.filter(file => file.name.toLowerCase().includes(searchQuery));
+          const files = chapter.files ?? [];
+          const filteredFiles = files.filter((file) =>
+            file.name.toLowerCase().includes(searchQuery),
+          );
 
-      if (subjectMatches || chapterMatches || filteredFiles.length > 0) {
+          if (subjectMatches || chapterMatches || filteredFiles.length > 0) {
+            return {
+              ...chapter,
+              files: chapterMatches || subjectMatches ? files : filteredFiles,
+            };
+          }
+          return null;
+        })
+        .filter(Boolean) as StudyChapter[];
+
+      if (subjectMatches || filteredChapters.length > 0) {
         return {
-          ...chapter,
-          files: chapterMatches || subjectMatches ? files : filteredFiles
+          ...subject,
+          chapters: filteredChapters,
         };
       }
       return null;
-    }).filter(Boolean) as StudyChapter[];
+    })
+    .filter(Boolean) as StudySubject[] | undefined;
 
-    if (subjectMatches || filteredChapters.length > 0) {
-      return {
-        ...subject,
-        chapters: filteredChapters
-      }
-    }
-    return null;
-  }).filter(Boolean) as StudySubject[] | undefined;
-
-  const displaySubjects = searchQuery ? filteredSubjects : currentClass?.subjects;
-  const activeDisplaySubject = displaySubjects?.find(s => s.id === activeSubject) || displaySubjects?.[0];
+  const displaySubjects = searchQuery
+    ? filteredSubjects
+    : currentClass?.subjects;
+  const activeDisplaySubject =
+    displaySubjects?.find((s) => s.id === activeSubject) ||
+    displaySubjects?.[0];
 
   return (
     <>
@@ -1247,161 +1269,223 @@ function StudyMaterial() {
 
       <div className="sm-hero">
         <div className="container sm-hero-content">
-          <h1>QUANTUM<br />STUDY LIBRARY</h1>
+          <h1>
+            QUANTUM
+            <br />
+            STUDY LIBRARY
+          </h1>
           <p>Notes, chapters and study material — all in one place.</p>
 
           <div className="sm-search-bar">
             <Search size={20} />
-            <input type="text" placeholder="Search study materials..." value={searchQuery} onChange={handleSearch} />
+            <input
+              type="text"
+              placeholder="Search study materials..."
+              value={searchQuery}
+              onChange={handleSearch}
+            />
           </div>
         </div>
       </div>
 
       <section className="section sm-main">
-       <div className="container">
-        {loading && (
-          <div className="sm-skeleton-container">
-            <div className="sm-skeleton-classes">
-              {Array.from({ length: 4 }).map((_, i) => <span key={i} className="sm-skeleton sm-skel-pill"></span>)}
+        <div className="container">
+          {loading && (
+            <div className="sm-skeleton-container">
+              <div className="sm-skeleton-classes">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <span key={i} className="sm-skeleton sm-skel-pill"></span>
+                ))}
+              </div>
+              <div className="sm-skeleton-subjects">
+                <div className="sm-skeleton sm-skel-card"></div>
+                <div className="sm-skeleton sm-skel-card"></div>
+              </div>
             </div>
-            <div className="sm-skeleton-subjects">
-              <div className="sm-skeleton sm-skel-card"></div>
-              <div className="sm-skeleton sm-skel-card"></div>
+          )}
+          {!loading && error && (
+            <div className="sm-empty-state">
+              <strong>Unable to load study material. Please try again.</strong>
+              <span>Please try refreshing the page in a moment.</span>
             </div>
-          </div>
-        )}
-        {!loading && error && (
-          <div className="sm-empty-state">
-            <strong>Unable to load study material. Please try again.</strong>
-            <span>Please try refreshing the page in a moment.</span>
-          </div>
-        )}
-        {!loading && !error && classes.length === 0 && (
-          <div className="sm-empty-state">
-            <strong>No study material available yet.</strong>
-            <span>PDFs added to the shared Drive folder will appear here automatically.</span>
-          </div>
-        )}
-
-        {!loading && !error && classes.length > 0 && (
-          <div className="sm-layout">
-            <div className="sm-class-selector">
-              {classes.map((c) => {
-                const match = c.name.match(/\d+/);
-                const classNum = match ? match[0].padStart(2, '0') : "ALL";
-                return (
-                  <button
-                    key={c.id}
-                    className={`sm-class-pill ${activeClass === c.id ? 'active' : ''}`}
-                    onClick={() => {
-                      setActiveClass(c.id);
-                      setActiveSubject(c.subjects[0]?.id || "");
-                      setSearchQuery("");
-                    }}
-                  >
-                    <strong>{classNum}</strong>
-                    <span>CLASS</span>
-                  </button>
-                );
-              })}
+          )}
+          {!loading && !error && classes.length === 0 && (
+            <div className="sm-empty-state">
+              <strong>No study material available yet.</strong>
+              <span>
+                PDFs added to the shared Drive folder will appear here
+                automatically.
+              </span>
             </div>
+          )}
 
-            {currentClass && (
-              <div className="sm-content-area">
-                <div className="sm-breadcrumb">
-                  HOME / {currentClass.name.toUpperCase()} {activeDisplaySubject && !searchQuery ? `/ ${activeDisplaySubject.name.toUpperCase()}` : ''}
-                </div>
+          {!loading && !error && classes.length > 0 && (
+            <div className="sm-layout">
+              <div className="sm-class-selector">
+                {classes.map((c) => {
+                  const match = c.name.match(/\d+/);
+                  const classNum = match ? match[0].padStart(2, "0") : "ALL";
+                  return (
+                    <button
+                      key={c.id}
+                      className={`sm-class-pill ${activeClass === c.id ? "active" : ""}`}
+                      onClick={() => {
+                        setActiveClass(c.id);
+                        setActiveSubject(c.subjects[0]?.id || "");
+                        setSearchQuery("");
+                      }}
+                    >
+                      <strong>{classNum}</strong>
+                      <span>CLASS</span>
+                    </button>
+                  );
+                })}
+              </div>
 
-                {(!displaySubjects || displaySubjects.length === 0) ? (
-                  <div className="sm-empty-state">
-                    <strong>{searchQuery ? "No study material found." : "No subjects available for this class yet."}</strong>
+              {currentClass && (
+                <div className="sm-content-area">
+                  <div className="sm-breadcrumb">
+                    HOME / {currentClass.name.toUpperCase()}{" "}
+                    {activeDisplaySubject && !searchQuery
+                      ? `/ ${activeDisplaySubject.name.toUpperCase()}`
+                      : ""}
                   </div>
-                ) : (
-                  <>
-                    <div className="sm-subject-cards">
-                      {displaySubjects.map(s => (
-                        <button
-                          key={s.id}
-                          className={`sm-subject-card ${activeSubject === s.id && !searchQuery ? 'active' : ''}`}
-                          onClick={() => {
-                            setActiveSubject(s.id);
-                            if (searchQuery) setSearchQuery("");
-                          }}
-                        >
-                          <div className="sm-subject-icon">{getSubjectIcon(s.name)}</div>
-                          <div className="sm-subject-info">
-                            <h3>{s.name.toUpperCase()}</h3>
-                            <span>{(s.chapters?.length || 0) === 1 ? "1 CHAPTER" : (s.chapters?.length || 0) + " CHAPTERS"}</span>
-                          </div>
-                          <div className="sm-subject-action">OPEN SUBJECT &rarr;</div>
-                        </button>
-                      ))}
-                    </div>
 
-                    {(activeDisplaySubject && !searchQuery) || searchQuery ? (
-                      <div className="sm-chapters-list">
-                        <h3 className="sm-chapters-title">
-                          {searchQuery ? "Search Results" : `${activeDisplaySubject?.name.toUpperCase()} CHAPTERS`}
-                        </h3>
-                        {searchQuery ? (
-                          displaySubjects.map(s => (
-                            (s.chapters || []).map((ch, idx) => (
-                              <ChapterCard
-                                key={ch.id}
-                                chapter={ch}
-                                index={idx}
-                                expanded={expandedChapter === ch.id || !!searchQuery}
-                                onToggle={() => setExpandedChapter(expandedChapter === ch.id ? "" : ch.id)}
-                                subjectName={s.name}
-                              />
-                            ))
-                          ))
-                        ) : (
-                          (activeDisplaySubject?.chapters?.length || 0) === 0 ? (
+                  {!displaySubjects || displaySubjects.length === 0 ? (
+                    <div className="sm-empty-state">
+                      <strong>
+                        {searchQuery
+                          ? "No study material found."
+                          : "No subjects available for this class yet."}
+                      </strong>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="sm-subject-cards">
+                        {displaySubjects.map((s) => (
+                          <button
+                            key={s.id}
+                            className={`sm-subject-card ${activeSubject === s.id && !searchQuery ? "active" : ""}`}
+                            onClick={() => {
+                              setActiveSubject(s.id);
+                              if (searchQuery) setSearchQuery("");
+                            }}
+                          >
+                            <div className="sm-subject-icon">
+                              {getSubjectIcon(s.name)}
+                            </div>
+                            <div className="sm-subject-info">
+                              <h3>{s.name.toUpperCase()}</h3>
+                              <span>
+                                {(s.chapters?.length || 0) === 1
+                                  ? "1 CHAPTER"
+                                  : (s.chapters?.length || 0) + " CHAPTERS"}
+                              </span>
+                            </div>
+                            <div className="sm-subject-action">
+                              OPEN SUBJECT &rarr;
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+
+                      {(activeDisplaySubject && !searchQuery) || searchQuery ? (
+                        <div className="sm-chapters-list">
+                          <h3 className="sm-chapters-title">
+                            {searchQuery
+                              ? "Search Results"
+                              : `${activeDisplaySubject?.name.toUpperCase()} CHAPTERS`}
+                          </h3>
+                          {searchQuery ? (
+                            displaySubjects.map((s) =>
+                              (s.chapters || []).map((ch, idx) => (
+                                <ChapterCard
+                                  key={ch.id}
+                                  chapter={ch}
+                                  index={idx}
+                                  expanded={
+                                    expandedChapter === ch.id || !!searchQuery
+                                  }
+                                  onToggle={() =>
+                                    setExpandedChapter(
+                                      expandedChapter === ch.id ? "" : ch.id,
+                                    )
+                                  }
+                                  subjectName={s.name}
+                                />
+                              )),
+                            )
+                          ) : (activeDisplaySubject?.chapters?.length || 0) ===
+                            0 ? (
                             <div className="sm-empty-state">
                               <strong>No chapters available yet.</strong>
                             </div>
                           ) : (
-                            (activeDisplaySubject?.chapters || []).map((ch, idx) => (
-                              <ChapterCard
-                                key={ch.id}
-                                chapter={ch}
-                                index={idx}
-                                expanded={expandedChapter === ch.id}
-                                onToggle={() => setExpandedChapter(expandedChapter === ch.id ? "" : ch.id)}
-                              />
-                            ))
-                          )
-                        )}
-                      </div>
-                    ) : null}
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-       </div>
+                            (activeDisplaySubject?.chapters || []).map(
+                              (ch, idx) => (
+                                <ChapterCard
+                                  key={ch.id}
+                                  chapter={ch}
+                                  index={idx}
+                                  expanded={expandedChapter === ch.id}
+                                  onToggle={() =>
+                                    setExpandedChapter(
+                                      expandedChapter === ch.id ? "" : ch.id,
+                                    )
+                                  }
+                                />
+                              ),
+                            )
+                          )}
+                        </div>
+                      ) : null}
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </section>
       <EnquiryCTA />
     </>
   );
 }
 
-function ChapterCard({ chapter, index, expanded, onToggle, subjectName }: { chapter: StudyChapter, index: number, expanded: boolean, onToggle: () => void, subjectName?: string }) {
-  const num = String(index + 1).padStart(2, '0');
+function ChapterCard({
+  chapter,
+  index,
+  expanded,
+  onToggle,
+  subjectName,
+}: {
+  chapter: StudyChapter;
+  index: number;
+  expanded: boolean;
+  onToggle: () => void;
+  subjectName?: string;
+}) {
+  const num = String(index + 1).padStart(2, "0");
   return (
-    <div className={`sm-chapter-card ${expanded ? 'expanded' : ''}`}>
+    <div className={`sm-chapter-card ${expanded ? "expanded" : ""}`}>
       <button className="sm-chapter-header" onClick={onToggle}>
         <div className="sm-chapter-number">{num}</div>
         <div className="sm-chapter-info">
-          <span className="sm-chapter-label">{subjectName ? `${subjectName.toUpperCase()} - CHAPTER ${index + 1}` : `CHAPTER ${index + 1}`}</span>
+          <span className="sm-chapter-label">
+            {subjectName
+              ? `${subjectName.toUpperCase()} - CHAPTER ${index + 1}`
+              : `CHAPTER ${index + 1}`}
+          </span>
           <h4>{chapter.name}</h4>
         </div>
         <div className="sm-chapter-meta">
           <span>{chapter.files?.length || 0} STUDY MATERIALS</span>
           <span className="sm-chapter-toggle">
-            {expanded ? <ChevronUp size={18} /> : <span className="sm-chapter-view">VIEW &rarr;</span>}
+            {expanded ? (
+              <ChevronUp size={18} />
+            ) : (
+              <span className="sm-chapter-view">VIEW &rarr;</span>
+            )}
           </span>
         </div>
       </button>
@@ -1409,19 +1493,36 @@ function ChapterCard({ chapter, index, expanded, onToggle, subjectName }: { chap
       {expanded && (
         <div className="sm-chapter-body">
           {(chapter.files?.length || 0) === 0 ? (
-            <div className="sm-empty-state small">No PDFs available in this chapter yet.</div>
+            <div className="sm-empty-state small">
+              No PDFs available in this chapter yet.
+            </div>
           ) : (
             <div className="sm-pdf-list">
-              {(chapter.files || []).map(file => (
+              {(chapter.files || []).map((file) => (
                 <div className="sm-pdf-card" key={file.id}>
-                  <div className="sm-pdf-icon"><FileText size={22} /></div>
+                  <div className="sm-pdf-icon">
+                    <FileText size={22} />
+                  </div>
                   <div className="sm-pdf-info">
                     <strong title={file.name}>{file.name}</strong>
                     {file.size && <span>PDF &middot; {file.size}</span>}
                   </div>
                   <div className="sm-pdf-actions">
-                    <a href={`/api/study-material/file/${file.id}`} target="_blank" rel="noopener noreferrer" className="sm-btn sm-btn-view"><ExternalLink size={14} /> VIEW</a>
-                    <a href={`/api/study-material/file/${file.id}?download=1`} download className="sm-btn sm-btn-download"><Download size={14} /> DOWNLOAD</a>
+                    <a
+                      href={`/api/study-material/file/${file.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="sm-btn sm-btn-view"
+                    >
+                      <ExternalLink size={14} /> VIEW
+                    </a>
+                    <a
+                      href={`/api/study-material/file/${file.id}?download=1`}
+                      download
+                      className="sm-btn sm-btn-download"
+                    >
+                      <Download size={14} /> DOWNLOAD
+                    </a>
                   </div>
                 </div>
               ))}
@@ -1451,84 +1552,85 @@ function About() {
         description="Education should make you more curious, not just more prepared."
       />
       <section className="section about-page">
-       <div className="container about-grid">
-        <div className="about-copy">
-          <span className="kicker">Our story</span>
+        <div className="container about-grid">
+          <div className="about-copy">
+            <span className="kicker">Our story</span>
+            <h2>
+              Started small.
+              <br />
+              <em>Still personal.</em>
+            </h2>
+            <p>
+              Quantum began with one teacher, twelve students and a belief that
+              the right kind of attention can change a learner’s relationship
+              with a subject.
+            </p>
+            <p>
+              Today, our rooms are fuller, but the belief has stayed the same.
+              Small courses, honest feedback and teachers who remain interested
+              in how each student thinks.
+            </p>
+            <div className="mission-grid">
+              <div>
+                <strong>Mission</strong>
+                <p>
+                  Make difficult learning feel possible through clarity and
+                  care.
+                </p>
+              </div>
+              <div>
+                <strong>Vision</strong>
+                <p>Build independent, curious learners for the long term.</p>
+              </div>
+            </div>
+          </div>
+          <div className="about-image">
+            <img src="/about.png" />
+            <div className="about-note">
+              <span>Since</span>
+              <strong>2025</strong>
+              <span>Gorakhpur</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section infrastructure">
+        <div className="container">
+          <span className="kicker">Built for attention</span>
           <h2>
-            Started small.
+            Spaces that support
             <br />
-            <em>Still personal.</em>
+            <em>good study habits.</em>
           </h2>
-          <p>
-            Quantum began with one teacher, twelve students and a belief that
-            the right kind of attention can change a learner’s relationship with
-            a subject.
-          </p>
-          <p>
-            Today, our rooms are fuller, but the belief has stayed the same.
-            Small courses, honest feedback and teachers who remain interested in
-            how each student thinks.
-          </p>
-          <div className="mission-grid">
+          <div className="infra-grid">
             <div>
-              <strong>Mission</strong>
+              <strong>01</strong>
+              <h3>Air Conditioned Classrooms</h3>
               <p>
-                Make difficult learning feel possible through clarity and care.
+                Comfortable, cool and distraction-free classrooms designed to
+                support focused learning.
               </p>
             </div>
             <div>
-              <strong>Vision</strong>
-              <p>Build independent, curious learners for the long term.</p>
+              <strong>02</strong>
+
+              <h3>Separate Batches</h3>
+              <p>
+                Dedicated batches for different student groups, ensuring focused
+                teaching and better individual attention.
+              </p>
+            </div>
+            <div>
+              <strong>03</strong>
+
+              <h3>Weekly/Monthly Tests</h3>
+              <p>
+                Regular tests to evaluate progress, strengthen concepts and help
+                students prepare confidently for exams.
+              </p>
             </div>
           </div>
         </div>
-        <div className="about-image">
-          <img src="/about.png" />
-          <div className="about-note">
-            <span>Since</span>
-            <strong>2025</strong>
-            <span>Gorakhpur</span>
-          </div>
-        </div>
-       </div>
-      </section>
-      <section className="section infrastructure">
-       <div className="container">
-        <span className="kicker">Built for attention</span>
-        <h2>
-          Spaces that support
-          <br />
-          <em>good study habits.</em>
-        </h2>
-        <div className="infra-grid">
-          <div>
-            <strong>01</strong>
-            <h3>Air Conditioned Classrooms</h3>
-            <p>
-              Comfortable, cool and distraction-free classrooms designed to
-              support focused learning.
-            </p>
-          </div>
-          <div>
-            <strong>02</strong>
-
-            <h3>Separate Batches</h3>
-            <p>
-              Dedicated batches for different student groups, ensuring focused
-              teaching and better individual attention.
-            </p>
-          </div>
-          <div>
-            <strong>03</strong>
-
-            <h3>Weekly/Monthly Tests</h3>
-            <p>
-              Regular tests to evaluate progress, strengthen concepts and help
-              students prepare confidently for exams.
-            </p>
-          </div>
-        </div>
-       </div>
       </section>
       <EnquiryCTA />
     </>
@@ -1537,56 +1639,60 @@ function About() {
 function SocialFeed() {
   return (
     <section className="section social-feed">
-     <div className="container">
-      <div className="section-intro">
-        <div>
-          <span className="kicker">Stay connected</span>
-          <h2>
-            Classroom moments,
-            <br />
-            <em>shared with you.</em>
-          </h2>
+      <div className="container">
+        <div className="section-intro">
+          <div>
+            <span className="kicker">Stay connected</span>
+            <h2>
+              Classroom moments,
+              <br />
+              <em>shared with you.</em>
+            </h2>
+          </div>
+          <p>
+            Follow Quantum Classes Gorakhpur for updates, student moments and
+            announcements.
+          </p>
         </div>
-        <p>
-          Follow Quantum Classes Gorakhpur for updates, student moments and
-          announcements.
-        </p>
+        <div className="social-feed-grid">
+          <a
+            href={socialLinks.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="social-feed-icon">
+              <MessageCircle size={20} />
+            </span>
+            <strong>Instagram</strong>
+            <small>@quantumclassesgkp</small>
+            <ExternalLink size={16} />
+          </a>
+          <a
+            href={socialLinks.facebook}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="social-feed-icon">
+              <BookOpen size={20} />
+            </span>
+            <strong>Facebook</strong>
+            <small>Quantum Classes Gorakhpur</small>
+            <ExternalLink size={16} />
+          </a>
+          <a
+            href={socialLinks.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="social-feed-icon">
+              <Play size={20} />
+            </span>
+            <strong>YouTube</strong>
+            <small>@quantumclassesgkp</small>
+            <ExternalLink size={16} />
+          </a>
+        </div>
       </div>
-      <div className="social-feed-grid">
-        <a
-          href={socialLinks.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className="social-feed-icon">
-            <MessageCircle size={20} />
-          </span>
-          <strong>Instagram</strong>
-          <small>@quantumclassesgkp</small>
-          <ExternalLink size={16} />
-        </a>
-        <a
-          href={socialLinks.facebook}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className="social-feed-icon">
-            <BookOpen size={20} />
-          </span>
-          <strong>Facebook</strong>
-          <small>Quantum Classes Gorakhpur</small>
-          <ExternalLink size={16} />
-        </a>
-        <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">
-          <span className="social-feed-icon">
-            <Play size={20} />
-          </span>
-          <strong>YouTube</strong>
-          <small>@quantumclassesgkp</small>
-          <ExternalLink size={16} />
-        </a>
-      </div>
-     </div>
     </section>
   );
 }
@@ -1609,85 +1715,85 @@ function Contact() {
         description="Questions about courses, fees or the right starting point? We are here to help."
       />
       <section className="section contact-page">
-       <div className="container contact-grid">
-        <div className="contact-details">
-          <div>
-            <MapPin />
-            <span>
-              <strong>Visit us</strong>
-              {contactDetails.address}
-              <br />
-              <strong>Office Hours</strong>4:00 PM – 8:00 PM
-            </span>
-          </div>
-          <div>
-            <Phone />
-            <span>
-              <strong>Call us</strong>
-              <a href={contactDetails.phoneHref}>{contactDetails.phone}</a>
-            </span>
-          </div>
-          <div>
-            <Mail />
-            <span>
-              <strong>Email us</strong>
-              <a href={`mailto:${contactDetails.email}`}>
-                {contactDetails.email}
-              </a>
-            </span>
-          </div>
-          <a
-            className="button button-primary directions-button"
-            href={contactDetails.mapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Get Directions <ArrowRight size={16} />
-          </a>
-          <div className="contact-socials">
-            <strong>Follow us</strong>
+        <div className="container contact-grid">
+          <div className="contact-details">
             <div>
-              <a
-                href={socialLinks.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-              >
-                <MessageCircle size={18} />
-              </a>
-              <a
-                href={socialLinks.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-              >
-                <BookOpen size={18} />
-              </a>
-              <a
-                href={socialLinks.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
-              >
-                <Play size={18} />
-              </a>
+              <MapPin />
+              <span>
+                <strong>Visit us</strong>
+                {contactDetails.address}
+                <br />
+                <strong>Office Hours</strong>4:00 PM – 8:00 PM
+              </span>
+            </div>
+            <div>
+              <Phone />
+              <span>
+                <strong>Call us</strong>
+                <a href={contactDetails.phoneHref}>{contactDetails.phone}</a>
+              </span>
+            </div>
+            <div>
+              <Mail />
+              <span>
+                <strong>Email us</strong>
+                <a href={`mailto:${contactDetails.email}`}>
+                  {contactDetails.email}
+                </a>
+              </span>
+            </div>
+            <a
+              className="button button-primary directions-button"
+              href={contactDetails.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Get Directions <ArrowRight size={16} />
+            </a>
+            <div className="contact-socials">
+              <strong>Follow us</strong>
+              <div>
+                <a
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                >
+                  <MessageCircle size={18} />
+                </a>
+                <a
+                  href={socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                >
+                  <BookOpen size={18} />
+                </a>
+                <a
+                  href={socialLinks.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                >
+                  <Play size={18} />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="map-placeholder">
+            <iframe
+              src={contactDetails.mapEmbedUrl}
+              title="Quantum Classes location map"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="map-overlay">
+              <MapPin size={22} />
+              <strong>Quantum Classes</strong>
+              <span>Padri Bazaar, Gorakhpur</span>
             </div>
           </div>
         </div>
-        <div className="map-placeholder">
-          <iframe
-            src={contactDetails.mapEmbedUrl}
-            title="Quantum Classes location map"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-          <div className="map-overlay">
-            <MapPin size={22} />
-            <strong>Quantum Classes</strong>
-            <span>Padri Bazaar, Gorakhpur</span>
-          </div>
-        </div>
-       </div>
       </section>
       <SocialFeed />
       <EnquiryCTA />
@@ -1722,8 +1828,8 @@ function Gallery() {
   const selectedCategoryName =
     activeCategory === ALL_CATEGORY_ID && selectedImage
       ? (categories.find((c) =>
-        c.images.some((img) => img.id === selectedImage.id),
-      )?.name ?? "All")
+          c.images.some((img) => img.id === selectedImage.id),
+        )?.name ?? "All")
       : (categories.find((c) => c.id === activeCategory)?.name ?? "All");
 
   useEffect(() => {
@@ -1782,95 +1888,97 @@ function Gallery() {
         description="Explore moments from our classrooms, events, students, results and campus. Categories update automatically from our Google Drive gallery."
       />
       <section className="section gallery-page">
-       <div className="container">
-        <div
-          className="filter-row gallery-tabs"
-          role="tablist"
-          aria-label="Gallery categories"
-        >
-          {loading ? (
-            <>
-              <span className="gallery-tab-skeleton" />
-              <span className="gallery-tab-skeleton" />
-              <span className="gallery-tab-skeleton" />
-            </>
-          ) : (
-            <>
-              <button
-                className={
-                  activeCategory === ALL_CATEGORY_ID
-                    ? "filter active"
-                    : "filter"
-                }
-                onClick={() => {
-                  setActiveCategory(ALL_CATEGORY_ID);
-                  setSelectedIndex(null);
-                }}
-              >
-                All
-              </button>
-              {categories.map((category) => (
+        <div className="container">
+          <div
+            className="filter-row gallery-tabs"
+            role="tablist"
+            aria-label="Gallery categories"
+          >
+            {loading ? (
+              <>
+                <span className="gallery-tab-skeleton" />
+                <span className="gallery-tab-skeleton" />
+                <span className="gallery-tab-skeleton" />
+              </>
+            ) : (
+              <>
                 <button
-                  key={category.id}
                   className={
-                    activeCategory === category.id ? "filter active" : "filter"
+                    activeCategory === ALL_CATEGORY_ID
+                      ? "filter active"
+                      : "filter"
                   }
                   onClick={() => {
-                    setActiveCategory(category.id);
+                    setActiveCategory(ALL_CATEGORY_ID);
                     setSelectedIndex(null);
                   }}
                 >
-                  {category.name}
+                  All
                 </button>
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    className={
+                      activeCategory === category.id
+                        ? "filter active"
+                        : "filter"
+                    }
+                    onClick={() => {
+                      setActiveCategory(category.id);
+                      setSelectedIndex(null);
+                    }}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </>
+            )}
+          </div>
+          {loading && (
+            <div className="gallery-skeleton-grid">
+              {Array.from({ length: 6 }, (_, index) => (
+                <span key={index} />
               ))}
-            </>
-          )}
-        </div>
-        {loading && (
-          <div className="gallery-skeleton-grid">
-            {Array.from({ length: 6 }, (_, index) => (
-              <span key={index} />
-            ))}
-          </div>
-        )}
-        {!loading && error && (
-          <div className="gallery-state">
-            <strong>We could not load the gallery right now.</strong>
-            <span>Please try refreshing the page in a moment.</span>
-          </div>
-        )}
-        {!loading &&
-          !error &&
-          activeImages.length === 0 &&
-          categories.length > 0 && (
-            <div className="gallery-state">
-              <strong>No photos yet in this category.</strong>
-              <span>New uploads will appear here automatically.</span>
             </div>
           )}
-        {!loading && !error && activeImages.length > 0 && (
-          <div className="gallery-grid">
-            {activeImages.map((image, index) => (
-              <button
-                className="gallery-tile"
-                key={image.id}
-                onClick={() => setSelectedIndex(index)}
-              >
-                <img src={image.src} alt={image.name} loading="lazy" />
-                <span>{image.name}</span>
-              </button>
-            ))}
-          </div>
-        )}
-        {!loading && !error && categories.length === 0 && (
-          <div className="gallery-state">
-            <strong>No gallery categories yet.</strong>
-            <span>
-              Create a subfolder in the shared Drive folder to get started.
-            </span>
-          </div>
-        )}
-       </div>
+          {!loading && error && (
+            <div className="gallery-state">
+              <strong>We could not load the gallery right now.</strong>
+              <span>Please try refreshing the page in a moment.</span>
+            </div>
+          )}
+          {!loading &&
+            !error &&
+            activeImages.length === 0 &&
+            categories.length > 0 && (
+              <div className="gallery-state">
+                <strong>No photos yet in this category.</strong>
+                <span>New uploads will appear here automatically.</span>
+              </div>
+            )}
+          {!loading && !error && activeImages.length > 0 && (
+            <div className="gallery-grid">
+              {activeImages.map((image, index) => (
+                <button
+                  className="gallery-tile"
+                  key={image.id}
+                  onClick={() => setSelectedIndex(index)}
+                >
+                  <img src={image.src} alt={image.name} loading="lazy" />
+                  <span>{image.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+          {!loading && !error && categories.length === 0 && (
+            <div className="gallery-state">
+              <strong>No gallery categories yet.</strong>
+              <span>
+                Create a subfolder in the shared Drive folder to get started.
+              </span>
+            </div>
+          )}
+        </div>
       </section>
       {selectedImage && (
         <div
@@ -1944,35 +2052,35 @@ function Enquiry() {
         description="Tell us a little about where you are. A counsellor will call within 24 hours to help you find the right fit."
       />
       <section className="enquiry-page">
-       <div className="container enquiry-grid">
-        <div className="enquire-copy">
-          <span className="kicker light">Free counselling call</span>
-          <h2>
-            Find your
-            <br />
-            <em>fit.</em>
-          </h2>
-          <p>
-            We will help you compare programmes, batch timings and the best next
-            step for your goals.
-          </p>
-          <div className="contact-line">
-            <Phone size={17} />
-            <span>
-              <strong>Prefer to call or WhatsApp us instead?</strong>
+        <div className="container enquiry-grid">
+          <div className="enquire-copy">
+            <span className="kicker light">Free counselling call</span>
+            <h2>
+              Find your
               <br />
-              <a href={contactDetails.phoneHref}>{contactDetails.phone}</a>
-              <br />
-              <a href={`mailto:${contactDetails.email}`}>
-                {contactDetails.email}
-              </a>
-            </span>
+              <em>fit.</em>
+            </h2>
+            <p>
+              We will help you compare programmes, batch timings and the best
+              next step for your goals.
+            </p>
+            <div className="contact-line">
+              <Phone size={17} />
+              <span>
+                <strong>Prefer to call or WhatsApp us instead?</strong>
+                <br />
+                <a href={contactDetails.phoneHref}>{contactDetails.phone}</a>
+                <br />
+                <a href={`mailto:${contactDetails.email}`}>
+                  {contactDetails.email}
+                </a>
+              </span>
+            </div>
+          </div>
+          <div className="form-card">
+            <EnquiryForm />
           </div>
         </div>
-        <div className="form-card">
-          <EnquiryForm />
-        </div>
-       </div>
       </section>
     </>
   );
