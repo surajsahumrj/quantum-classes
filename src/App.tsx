@@ -231,13 +231,11 @@ function Footer() {
           </div>
         </nav>
         <div className="footer-section footer-visit">
-            <strong>Visit</strong>
-            <span>{contactDetails.address}</span>
-            <span>Office Hours · 4:00 PM – 8:00 PM</span>
-            <a href={contactDetails.phoneHref}>{contactDetails.phone}</a>
-            <a href={`mailto:${contactDetails.email}`}>
-              {contactDetails.email}
-            </a>
+          <strong>Visit</strong>
+          <span>{contactDetails.address}</span>
+          <span>Office Hours · 4:00 PM – 8:00 PM</span>
+          <a href={contactDetails.phoneHref}>{contactDetails.phone}</a>
+          <a href={`mailto:${contactDetails.email}`}>{contactDetails.email}</a>
         </div>
         <div className="footer-section socials">
           <strong>Follow Us</strong>
@@ -827,34 +825,38 @@ function GalleryStrip() {
           View all photos <ArrowRight size={15} />
         </Link>
       </div>
-      <div
-        className="moments-viewport"
-        onMouseEnter={pauseAnim}
-        onMouseLeave={resumeAnim}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+      <div className="container">
         <div
-          ref={trackRef}
-          className="moments-track"
-          style={{ "--moments-track-w": `${trackW}px` } as React.CSSProperties}
+          className="moments-viewport"
+          onMouseEnter={pauseAnim}
+          onMouseLeave={resumeAnim}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          {tiles.map((img, i) => (
-            <div className="moments-tile" key={`${img.id}-${i}`}>
-              <img
-                src={img.src}
-                alt={img.name}
-                loading="lazy"
-                onError={(e) => {
-                  const tile = e.currentTarget.closest(
-                    ".moments-tile",
-                  ) as HTMLElement | null;
-                  if (tile) tile.style.display = "none";
-                }}
-              />
-            </div>
-          ))}
+          <div
+            ref={trackRef}
+            className="moments-track"
+            style={
+              { "--moments-track-w": `${trackW}px` } as React.CSSProperties
+            }
+          >
+            {tiles.map((img, i) => (
+              <div className="moments-tile" key={`${img.id}-${i}`}>
+                <img
+                  src={img.src}
+                  alt={img.name}
+                  loading="lazy"
+                  onError={(e) => {
+                    const tile = e.currentTarget.closest(
+                      ".moments-tile",
+                    ) as HTMLElement | null;
+                    if (tile) tile.style.display = "none";
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

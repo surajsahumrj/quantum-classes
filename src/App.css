@@ -2906,8 +2906,8 @@ footer {
     }
 
     .moments-header {
-        padding: 0 5% 26px
-    }
+    padding-bottom: 26px;
+}
 
     .moments-viewport {
         overflow-x: auto;
