@@ -3078,7 +3078,7 @@ footer {
     display: flex;
     gap: 12px;
     width: max-content;
-    animation: moments-scroll 35s linear infinite;
+    animation: moments-scroll 80s linear infinite;
     will-change: transform
 }
 

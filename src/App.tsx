@@ -945,9 +945,10 @@ function StudentTestimonials() {
       if (viewport && !pausedRef.current) {
         const maxScroll = viewport.scrollWidth - viewport.clientWidth;
         if (maxScroll > 0) {
-          const elapsed = previousFrameTimeRef.current === null
-            ? 16.67
-            : time - previousFrameTimeRef.current;
+          const elapsed =
+            previousFrameTimeRef.current === null
+              ? 16.67
+              : time - previousFrameTimeRef.current;
           const nextPosition =
             autoScrollPositionRef.current + Math.min(elapsed, 50) * 0.03;
           if (nextPosition >= maxScroll) {
@@ -1004,7 +1005,10 @@ function StudentTestimonials() {
   };
 
   return (
-    <section className="section student-testimonials-section" aria-label="Student testimonials">
+    <section
+      className="section student-testimonials-section"
+      aria-label="Student testimonials"
+    >
       <div className="container">
         <div className="section-intro student-testimonials-intro">
           <div>
@@ -1045,7 +1049,11 @@ function StudentTestimonials() {
                   loading="lazy"
                 />
                 <div className="student-testimonials-copy">
-                  <Quote className="student-testimonials-quote" size={20} aria-hidden="true" />
+                  <Quote
+                    className="student-testimonials-quote"
+                    size={20}
+                    aria-hidden="true"
+                  />
                   <p>“{quote}”</p>
                   <strong>{name}</strong>
                 </div>
