@@ -1,3 +1,4 @@
+import { SiInstagram, SiFacebook, SiYoutube, SiWhatsapp } from "react-icons/si";
 import {
   useEffect,
   useRef,
@@ -136,6 +137,7 @@ const socialLinks = {
   instagram: "https://www.instagram.com/quantumclassesgkp/",
   facebook: "https://www.facebook.com/share/14o78DaeYrq/?mibextid=wwXIfr",
   youtube: "https://youtube.com/@quantumclassesgkp",
+  wachannel: "https://whatsapp.com/channel/0029Vb7imyTLdQeWf7hjFd40",
 };
 
 function Brand() {
@@ -212,8 +214,8 @@ function Footer() {
           />
         </div>
 
-        <div className="footer-links">
-          <div>
+        <nav className="footer-links" aria-label="Footer navigation">
+          <div className="footer-section footer-explore">
             <strong>Explore</strong>
             <Link to="/courses">Courses</Link>
             <Link to="/fees">Fees</Link>
@@ -221,7 +223,8 @@ function Footer() {
             <Link to="/gallery">Gallery</Link>
             <Link to="/about">About</Link>
           </div>
-          <div>
+        </nav>
+        <div className="footer-section footer-visit">
             <strong>Visit</strong>
             <span>{contactDetails.address}</span>
             <span>Office Hours · 4:00 PM – 8:00 PM</span>
@@ -229,34 +232,44 @@ function Footer() {
             <a href={`mailto:${contactDetails.email}`}>
               {contactDetails.email}
             </a>
-          </div>
         </div>
-        <div className="socials">
-          <strong>Follow us</strong>
-          <div>
+        <div className="footer-section socials">
+          <strong>Follow Us</strong>
+          <div className="social-icons">
             <a
               href={socialLinks.instagram}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
             >
-              <MessageCircle size={18} />
+              <SiInstagram size={20} />
             </a>
+
             <a
               href={socialLinks.facebook}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
             >
-              <BookOpen size={18} />
+              <SiFacebook size={20} />
             </a>
+
             <a
               href={socialLinks.youtube}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube"
             >
-              <Play size={18} />
+              <SiYoutube size={20} />
+            </a>
+
+            <a
+              href={socialLinks.wachannel}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp Channel"
+            >
+              <SiWhatsapp size={20} />
             </a>
           </div>
         </div>
@@ -1034,7 +1047,7 @@ function Fees() {
     ],
     [
       "Uprisers (KG - 5th)",
-      "₹500",
+      "₹600",
       "₹2,700",
       "10% off",
       "₹4,900",
@@ -1708,6 +1721,18 @@ function SocialFeed() {
             <small>@quantumclassesgkp</small>
             <ExternalLink size={16} />
           </a>
+          <a
+            href={socialLinks.wachannel}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="social-feed-icon">
+              <MessageCircle size={20} />
+            </span>
+            <strong>WhatsApp Channel</strong>
+            <small>@quantumclassesgkp</small>
+            <ExternalLink size={16} />
+          </a>
         </div>
       </div>
     </section>
@@ -1793,6 +1818,14 @@ function Contact() {
                   aria-label="YouTube"
                 >
                   <Play size={18} />
+                </a>
+                <a
+                  href={socialLinks.wachannel}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp Channel"
+                >
+                  <MessageCircle size={18} />
                 </a>
               </div>
             </div>

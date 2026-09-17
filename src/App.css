@@ -1951,35 +1951,27 @@ form>label:not(.consent) {
 footer {
     background: #062f33;
     color: #a8c2bf;
-    padding-block: 64px 26px;
-    font-size: 15px;
+    padding-block: 68px 28px;
+    font-size: 16px;
 }
 
 .footer-top {
     display: grid;
-    grid-template-columns: 1.2fr .7fr .4fr 1.7fr;
-    gap: 36px 6%;
-    padding-bottom: 46px;
-    border-bottom: 1px solid rgba(255, 255, 255, .15)
+    grid-template-columns: minmax(150px, .7fr) minmax(125px, .55fr) minmax(210px, .9fr) minmax(140px, .55fr) minmax(280px, 1.3fr);
+    align-items: start;
+    gap: 34px clamp(24px, 3vw, 48px);
+    padding-bottom: 42px;
+    border-bottom: 1px solid rgba(255, 255, 255, .16);
 }
 
 .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 16px;
     color: #fff;
-    align-self: start
-}
-
-.footer-brand .brand-mark {
-    border-color: #a5d1cb
-}
-
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  justify-content: flex-start;
-  gap: 18px;
-  color: #fff;
-  text-align: left;
+    text-align: left;
 }
 
 
@@ -1992,57 +1984,77 @@ footer {
 }
 
 .footer-brand-logo {
-    width: 200px;
-    height: 200px;
+    width: clamp(140px, 11vw, 176px);
+    aspect-ratio: 1;
+    height: auto;
     object-fit: cover;
     display: block;
     border-radius: 50%;
-    
-}
-
-.footer-top>p {
-    color: #d3e3df;
-    font: 18px/1.6 var(--serif)
 }
 
 .footer-links {
-    display: flex;
-    gap: 55px
+    min-width: 0;
 }
 
-.footer-links div {
+.footer-section {
     display: grid;
     align-content: start;
-    gap: 13px;
-    font-size: 14px;
-    line-height: 1.6;
+    gap: 10px;
+    min-width: 0;
+    color: #b7cfcc;
+    font-size: 15px;
+    line-height: 1.55;
 }
 
-.footer-links strong,
-.socials strong {
+.footer-section strong {
     color: #8fc3bd;
     text-transform: uppercase;
     letter-spacing: .1em;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    margin-bottom: 6px
+    margin-bottom: 5px;
 }
 
-.footer-links a:hover {
-    color: #fff
+.footer-section a {
+    width: fit-content;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    transition: color .2s ease;
 }
 
-.socials>div {
+.footer-section a:hover,
+.footer-section a:focus-visible {
+    color: #fff;
+}
+
+.footer-visit span,
+.footer-visit a {
+    overflow-wrap: anywhere;
+}
+
+.social-icons {
     display: flex;
-    gap: 10px
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .socials a {
-    border: 1px solid rgba(255, 255, 255, .22);
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, .25);
     color: #d3e3df;
-    padding: 9px;
     display: grid;
-    place-items: center
+    place-items: center;
+    border-radius: 7px;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+}
+
+.socials a:hover,
+.socials a:focus-visible {
+    background: #fff;
+    border-color: #fff;
+    color: var(--teal);
+    transform: translateY(-2px);
 }
 
 .footer-bottom {
@@ -2050,23 +2062,23 @@ footer {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
-    padding-top: 22px;
+    gap: 12px 24px;
+    padding-top: 23px;
     color: #86a6a2;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.6;
 }
 
 .footer-map {
     align-self: start;
     min-width: 0;
-    width: 100%
+    width: 100%;
 }
 
 .footer-map iframe {
     display: block;
     width: 100%;
-    height: 230px;
+    height: clamp(205px, 17vw, 242px);
     border: 0;
     border-radius: 8px;
     overflow: hidden;
@@ -2095,7 +2107,7 @@ footer {
 
 @media(max-width:1250px) {
     .footer-top {
-        grid-template-columns: 1.2fr .7fr 1.4fr
+        grid-template-columns: minmax(150px, .8fr) minmax(125px, .65fr) minmax(210px, 1fr) minmax(140px, .6fr)
     }
 
     .footer-map {
@@ -2130,15 +2142,21 @@ footer {
     }
 
     .footer-top {
-        grid-template-columns: 1fr 1fr
+        grid-template-columns: minmax(160px, .75fr) minmax(190px, 1fr);
+        gap: 36px 48px
     }
 
     .footer-links {
-        grid-column: span 2
+        grid-column: auto
+    }
+
+    .footer-visit {
+        grid-column: 2;
+        grid-row: 1
     }
 
     .socials {
-        align-self: start
+        grid-column: 1
     }
 
     .compact-cta-grid {
@@ -2379,27 +2397,23 @@ footer {
     }
 
     .footer-top {
-        grid-template-columns: 1fr 1fr;
-        gap: 30px
+        grid-template-columns: 1fr;
+        gap: 34px;
+        padding-bottom: 34px
     }
 
-    .footer-top>p {
-        grid-column: 2;
-        font-size: 15px
-    }
-
-    .footer-links {
-        grid-column: 1/-1;
-        gap: 30px
-    }
-
-    .socials {
-        grid-column: 1/-1
+    .footer-brand,
+    .footer-section,
+    .socials,
+    .footer-visit {
+        grid-column: auto;
+        grid-row: auto
     }
 
     .footer-bottom {
         gap: 10px;
-        flex-direction: column
+        flex-direction: column;
+        text-align: center
     }
 
     .whatsapp {
@@ -2480,15 +2494,48 @@ footer {
         gap: 8px;
     }
 
-    .footer-links {
-        flex-direction: column;
-        gap: 24px;
+    footer {
+        padding-top: 52px;
     }
 
-    .socials a,
-    .contact-socials a {
-        width: 42px;
-        height: 42px;
+    .footer-brand {
+        align-items: center;
+        text-align: center
+    }
+
+    .footer-brand-logo {
+        width: clamp(112px, 34vw, 140px)
+    }
+
+    .footer-section {
+        gap: 7px;
+        font-size: 16px
+    }
+
+    .footer-section strong {
+        font-size: 13px;
+        margin-bottom: 7px
+    }
+
+    .footer-explore a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, .1)
+    }
+
+    .social-icons {
+        gap: 12px
+    }
+
+    .socials a {
+        width: 44px;
+        height: 44px
+    }
+
+    .footer-map iframe {
+        height: clamp(205px, 62vw, 250px)
     }
 
     /* Fee table becomes a stacked list of cards instead of a wide table,
@@ -2556,19 +2603,6 @@ footer {
         letter-spacing: .06em;
     }
 
-    .footer-brand {
-        align-items: center;
-        text-align: center;
-    }
-
-    .footer-brand-logo {
-        width: 120px;
-        height: 120px;
-    }
-
-    .footer-brand-name {
-        font-size: 20px;
-    }
 }
 
 .gallery-tabs {
