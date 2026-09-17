@@ -1114,6 +1114,176 @@ small {
     color: var(--gold)
 }
 
+.why-quantum-section {
+    background: var(--off);
+    border-top: 1px solid var(--line);
+}
+
+.why-quantum-intro {
+    margin-bottom: 46px;
+}
+
+.why-quantum-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.why-quantum-card {
+    min-width: 0;
+    min-height: 278px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    transition: transform .22s ease, background-color .22s ease, border-color .22s ease;
+}
+
+.why-quantum-card:hover {
+    transform: translateY(-3px);
+    background: #fbfdfc;
+    border-color: #c7dcd8;
+}
+
+.why-quantum-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.why-quantum-number {
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+}
+
+.why-quantum-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    color: var(--teal);
+    background: #e3eeeb;
+    border-radius: 9px;
+}
+
+.why-quantum-card h3 {
+    margin: 0 0 12px;
+    color: var(--teal);
+    font: 20px/1.35 var(--serif);
+}
+
+.why-quantum-card p {
+    margin: 0;
+    color: #627071;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.why-quantum-closing {
+    max-width: 520px;
+    margin: 52px auto 0;
+    padding-top: 34px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+}
+
+.why-quantum-closing p {
+    margin: 0;
+    color: var(--teal);
+    font: 22px/1.5 var(--serif);
+}
+
+.why-quantum-closing span {
+    display: block;
+    margin-top: 10px;
+    color: #718080;
+    font-size: 14px;
+}
+
+.student-testimonials-section {
+    background: #eef5f3;
+    border-top: 1px solid #d9e7e4;
+}
+
+.student-testimonials-intro {
+    margin-bottom: 46px;
+}
+
+.student-testimonials-viewport {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    cursor: grab;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+}
+
+.student-testimonials-viewport::-webkit-scrollbar {
+    display: none;
+}
+
+.student-testimonials-viewport:active {
+    cursor: grabbing;
+}
+
+.student-testimonials-track {
+    display: flex;
+    gap: 18px;
+    width: max-content;
+    padding: 2px 0 4px;
+}
+
+.student-testimonials-card {
+    flex: 0 0 clamp(248px, 24vw, 320px);
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #d8e4e1;
+    border-radius: 12px;
+    scroll-snap-align: start;
+}
+
+.student-testimonials-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    background: #dbe9e6;
+}
+
+.student-testimonials-copy {
+    min-height: 178px;
+    padding: 20px 20px 22px;
+    display: flex;
+    flex-direction: column;
+}
+
+.student-testimonials-quote {
+    margin-bottom: 10px;
+    color: var(--gold);
+}
+
+.student-testimonials-copy p {
+    margin: 0;
+    color: #5e6b6c;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.student-testimonials-copy strong {
+    margin-top: auto;
+    padding-top: 18px;
+    color: var(--teal);
+    font-size: 15px;
+}
+
 .faculty-section {
     display: grid;
     grid-template-columns: 1fr .9fr;
@@ -2133,6 +2303,14 @@ footer {
         grid-template-columns: repeat(2, 1fr)
     }
 
+    .why-quantum-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .student-testimonials-card {
+        flex-basis: clamp(248px, 31vw, 300px)
+    }
+
     .result-grid {
         grid-template-columns: 1fr 1fr
     }
@@ -2308,6 +2486,7 @@ footer {
     .course-grid,
     .faculty-grid,
     .teaser-cards,
+    .why-quantum-grid,
     .result-grid,
     .infra-grid,
     .info-panels,
@@ -2319,6 +2498,32 @@ footer {
     .course-card,
     .course-card.detailed {
         min-height: 310px
+    }
+
+    .why-quantum-intro {
+        margin-bottom: 32px
+    }
+
+    .why-quantum-card {
+        min-height: 0;
+        padding: 24px
+    }
+
+    .why-quantum-closing {
+        margin-top: 38px;
+        padding-top: 28px
+    }
+
+    .student-testimonials-intro {
+        margin-bottom: 32px
+    }
+
+    .student-testimonials-card {
+        flex-basis: min(82vw, 320px)
+    }
+
+    .student-testimonials-copy {
+        min-height: 0
     }
 
     .faculty-card img {

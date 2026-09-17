@@ -34,11 +34,18 @@ import {
   MessageCircle,
   Phone,
   Play,
+  Quote,
   Sparkles,
   X,
   Search,
   Atom,
+  ClipboardCheck,
   FlaskConical,
+  Library,
+  Lightbulb,
+  Snowflake,
+  Target,
+  UsersRound,
   Calculator,
   ChevronUp,
 } from "lucide-react";
@@ -426,6 +433,7 @@ function AnimationSystem() {
       const cardGrids = [
         ".course-grid",
         ".teaser-cards",
+        ".why-quantum-grid",
         ".infra-grid",
         ".social-feed-grid",
       ];
@@ -863,6 +871,262 @@ function GalleryStrip() {
   );
 }
 
+function StudentTestimonials() {
+  const testimonials = [
+    {
+      name: "Aagya Singh",
+      imageId: "1B-JFc1BCI5QzLsJ5sLZd6hVywDeRL3NB",
+      quote:
+        "The lessons are easy to follow, and regular practice has made me feel much more confident.",
+    },
+    {
+      name: "Abhinav Gupta",
+      imageId: "1BmbbVbKdD9FY-5uhB81NmtcIGvvIp4X3",
+      quote:
+        "I like how every topic is explained clearly before we move on to more difficult questions.",
+    },
+    {
+      name: "Aniket Gupta",
+      imageId: "1w-CU2ozBTHlpoeTyEFvU_uPGjYOLKoEo",
+      quote:
+        "The classes have helped me practise consistently and understand my subjects better.",
+    },
+    {
+      name: "Pratyush Narayan",
+      imageId: "1BlDh34i20WKNILoQDzzhFpNBZPujaHft",
+      quote:
+        "Teachers make time for questions, which makes learning feel much more comfortable.",
+    },
+    {
+      name: "Sanchita Yadav",
+      imageId: "101fl0eR3vj9pTPXE755KijETk2svOk-3",
+      quote:
+        "The notes and practice material help me revise in a more organised way.",
+    },
+    {
+      name: "Shivam Yadav",
+      imageId: "1UPpa4A98ocNuRvbb2eq-756H6H6cOwC1",
+      quote:
+        "The regular tests help me see what I understand and what I need to work on.",
+    },
+    {
+      name: "Sonali Yadav",
+      imageId: "1BuNvN2JNtNCF_w5EdpC-WYoTGAxzU-pj",
+      quote:
+        "I feel encouraged to keep improving, one concept and one practice session at a time.",
+    },
+    {
+      name: "Vaibhavi Pandey",
+      imageId: "1DKF3Qr9Kj50EHfKFelB1ZzM04mBbTszC",
+      quote:
+        "Quantum gives me a focused place to learn and build confidence in every subject.",
+    },
+  ];
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const pausedRef = useRef(false);
+  const draggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartScrollRef = useRef(0);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const scroll = () => {
+      const viewport = viewportRef.current;
+      if (viewport && !pausedRef.current) {
+        const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+        if (maxScroll > 0) {
+          viewport.scrollLeft = viewport.scrollLeft >= maxScroll - 1
+            ? 0
+            : viewport.scrollLeft + 0.28;
+        }
+      }
+      animationFrameRef.current = window.requestAnimationFrame(scroll);
+    };
+
+    animationFrameRef.current = window.requestAnimationFrame(scroll);
+    return () => {
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
+
+  const pause = () => {
+    pausedRef.current = true;
+  };
+  const resume = () => {
+    if (!draggingRef.current) pausedRef.current = false;
+  };
+  const startDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse" || !viewportRef.current) return;
+    draggingRef.current = true;
+    pause();
+    dragStartXRef.current = event.clientX;
+    dragStartScrollRef.current = viewportRef.current.scrollLeft;
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+  const drag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current || !viewportRef.current) return;
+    viewportRef.current.scrollLeft =
+      dragStartScrollRef.current - (event.clientX - dragStartXRef.current);
+  };
+  const endDrag = () => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    resume();
+  };
+
+  return (
+    <section className="section student-testimonials-section" aria-label="Student testimonials">
+      <div className="container">
+        <div className="section-intro student-testimonials-intro">
+          <div>
+            <span className="kicker">Student Voices</span>
+            <h2>
+              What our students
+              <br />
+              <em>say about Quantum.</em>
+            </h2>
+          </div>
+          <p>
+            Real experiences from students who have learned, practiced and grown
+            with Quantum Classes.
+          </p>
+        </div>
+
+        <div
+          className="student-testimonials-viewport"
+          ref={viewportRef}
+          onMouseEnter={pause}
+          onMouseLeave={resume}
+          onFocus={pause}
+          onBlur={resume}
+          onPointerDown={startDrag}
+          onPointerMove={drag}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          onTouchStart={pause}
+          onTouchEnd={resume}
+        >
+          <div className="student-testimonials-track">
+            {testimonials.map(({ name, imageId, quote }) => (
+              <article className="student-testimonials-card" key={imageId}>
+                <img
+                  src={`/api/gallery/image/${imageId}`}
+                  alt={`${name}, Quantum Classes student`}
+                  loading="lazy"
+                />
+                <div className="student-testimonials-copy">
+                  <Quote className="student-testimonials-quote" size={20} aria-hidden="true" />
+                  <p>“{quote}”</p>
+                  <strong>{name}</strong>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyQuantum() {
+  const benefits = [
+    {
+      number: "01",
+      title: "Clear Concept Building",
+      description:
+        "Strong fundamentals come first. We make difficult topics simple and understandable before moving to advanced problems.",
+      icon: Lightbulb,
+    },
+    {
+      number: "02",
+      title: "Personal Attention & Separate Batches",
+      description:
+        "Separate batches for different class groups and learning levels allow teachers to give students focused attention and help them learn at the right pace.",
+      icon: UsersRound,
+    },
+    {
+      number: "03",
+      title: "Air-Conditioned Classrooms",
+      description:
+        "Comfortable, air-conditioned classrooms provide a cool, focused and distraction-free environment for better learning.",
+      icon: Snowflake,
+    },
+    {
+      number: "04",
+      title: "Weekly & Monthly Tests",
+      description:
+        "Regular weekly and monthly tests help students evaluate their preparation, strengthen concepts and track their academic progress.",
+      icon: ClipboardCheck,
+    },
+    {
+      number: "05",
+      title: "Complete Study Support",
+      description:
+        "Students get access to structured notes, PDFs, practice material and other resources through the Quantum Study Library.",
+      icon: Library,
+    },
+    {
+      number: "06",
+      title: "Exam-Focused Preparation",
+      description:
+        "Focused preparation helps students build strong concepts, practice consistently and develop the confidence needed for school and competitive examinations.",
+      icon: Target,
+    },
+  ];
+
+  return (
+    <section className="section why-quantum-section">
+      <div className="container">
+        <div className="section-intro why-quantum-intro">
+          <div>
+            <span className="kicker">Why Quantum Classes</span>
+            <h2>
+              More than classes.
+              <br />
+              <em>A place to learn with confidence.</em>
+            </h2>
+          </div>
+          <p>
+            At Quantum Classes, we focus on clear concepts, consistent practice
+            and personal attention — so students learn how to think, not just
+            what to remember.
+          </p>
+        </div>
+
+        <div className="why-quantum-grid">
+          {benefits.map(({ number, title, description, icon: Icon }) => (
+            <article className="why-quantum-card" key={number}>
+              <div className="why-quantum-card-top">
+                <span className="why-quantum-number">{number}</span>
+                <span className="why-quantum-icon" aria-hidden="true">
+                  <Icon size={22} strokeWidth={1.8} />
+                </span>
+              </div>
+              <h3>{title}</h3>
+              <p>{description}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="why-quantum-closing">
+          <p>
+            Understand better.
+            <br />
+            Practice consistently.
+            <br />
+            Grow confidently.
+          </p>
+          <span>That’s the Quantum approach.</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Home() {
   return (
     <>
@@ -941,7 +1205,7 @@ function Home() {
         </div>
       </section>
       <Stats />
-      <GalleryStrip />
+      <WhyQuantum />
       <section className="section teaser-grid">
         <div className="container">
           <div className="section-intro">
@@ -977,6 +1241,8 @@ function Home() {
           </div>
         </div>
       </section>
+      <GalleryStrip />
+      <StudentTestimonials />
       <EnquiryCTA />
     </>
   );
