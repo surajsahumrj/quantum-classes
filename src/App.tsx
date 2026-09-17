@@ -898,6 +898,12 @@ function StudentTestimonials() {
         "Teachers make time for questions, which makes learning feel much more comfortable.",
     },
     {
+      name: "Priyanshu Singh",
+      imageId: "1ybJWjvKxmNL1DT6sIUXguGYuhidMOTLP",
+      quote:
+        "The lessons are easy to follow, and regular practice has made me feel much more confident.",
+    },
+    {
       name: "Sanchita Yadav",
       imageId: "101fl0eR3vj9pTPXE755KijETk2svOk-3",
       quote:
