@@ -1,4 +1,5 @@
 import { SiInstagram, SiFacebook, SiYoutube, SiWhatsapp } from "react-icons/si";
+
 import {
   useEffect,
   useRef,
@@ -6,6 +7,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
+
 import {
   BrowserRouter,
   Link,
@@ -14,6 +16,7 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
+
 import {
   ArrowRight,
   BookOpen,
@@ -39,6 +42,9 @@ import {
   Calculator,
   ChevronUp,
 } from "lucide-react";
+
+import { Analytics } from "@vercel/analytics/react";
+
 import "./App.css";
 
 type Batch = {
@@ -148,7 +154,6 @@ function Brand() {
     </Link>
   );
 }
-function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
