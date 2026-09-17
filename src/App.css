@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
+body {
+    background: var(--off);
+    color: var(--charcoal);
+    font-family: var(--sans);
+    overflow-x: hidden;
+}
+
 .web3forms-honeypot {
     position: absolute !important;
     left: -10000px !important;
@@ -1242,10 +1249,9 @@ small {
 }
 
 .student-testimonials-card {
-    flex: 0 0 clamp(208px, 24vw, 200px);
+    flex: 0 0 260px;
+    min-width: 260px;
     overflow: hidden;
-    
-    
     border-radius: 20px;
     scroll-snap-align: start;
 }
@@ -2520,11 +2526,26 @@ footer {
     }
 
     .student-testimonials-card {
-        flex-basis: min(82vw, 320px)
+        flex-basis: 130px;
+        min-width: 130px;
     }
 
     .student-testimonials-copy {
-        min-height: 0
+        font-size: 10px;
+        line-height: 1.65;
+    }
+
+    .student-testimonials-name {
+        font-size: 10px;
+        line-height: 1.35;
+    }
+
+    .student-testimonials-role {
+        font-size: 11px;
+    }
+
+    .student-testimonials-quote {
+        font-size: 18px;
     }
 
     .faculty-card img {
