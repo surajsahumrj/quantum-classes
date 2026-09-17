@@ -1070,10 +1070,10 @@ function WhyQuantum() {
   const benefits = [
     {
       number: "01",
-      title: "Clear Concept Building",
+      title: "Air-Conditioned Classrooms",
       description:
-        "Strong fundamentals come first. We make difficult topics simple and understandable before moving to advanced problems.",
-      icon: Lightbulb,
+        "Comfortable, air-conditioned classrooms provide a cool, focused and distraction-free environment for better learning.",
+      icon: Snowflake,
     },
     {
       number: "02",
@@ -1084,10 +1084,10 @@ function WhyQuantum() {
     },
     {
       number: "03",
-      title: "Air-Conditioned Classrooms",
+      title: "Clear Concept Building",
       description:
-        "Comfortable, air-conditioned classrooms provide a cool, focused and distraction-free environment for better learning.",
-      icon: Snowflake,
+        "Strong fundamentals come first. We make difficult topics simple and understandable before moving to advanced problems.",
+      icon: Lightbulb,
     },
     {
       number: "04",

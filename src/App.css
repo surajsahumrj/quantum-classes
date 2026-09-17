@@ -794,7 +794,7 @@ small {
     height: 34px;
     border: 1px solid var(--line);
     display: grid;
-    place-items: center;
+    place-items: right;
     color: var(--teal);
 }
 
