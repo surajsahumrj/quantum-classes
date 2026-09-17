@@ -925,6 +925,8 @@ function StudentTestimonials() {
   const viewportRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const pausedRef = useRef(false);
+  const autoScrollPositionRef = useRef(0);
+  const previousFrameTimeRef = useRef<number | null>(null);
   const draggingRef = useRef(false);
   const dragStartXRef = useRef(0);
   const dragStartScrollRef = useRef(0);
@@ -932,16 +934,26 @@ function StudentTestimonials() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const scroll = () => {
+    const scroll = (time: number) => {
       const viewport = viewportRef.current;
       if (viewport && !pausedRef.current) {
         const maxScroll = viewport.scrollWidth - viewport.clientWidth;
         if (maxScroll > 0) {
-          viewport.scrollLeft = viewport.scrollLeft >= maxScroll - 1
-            ? 0
-            : viewport.scrollLeft + 0.28;
+          const elapsed = previousFrameTimeRef.current === null
+            ? 16.67
+            : time - previousFrameTimeRef.current;
+          const nextPosition =
+            autoScrollPositionRef.current + Math.min(elapsed, 50) * 0.03;
+          if (nextPosition >= maxScroll) {
+            autoScrollPositionRef.current = 0;
+            viewport.scrollLeft = 0;
+          } else {
+            autoScrollPositionRef.current = nextPosition;
+            viewport.scrollLeft = Math.round(autoScrollPositionRef.current);
+          }
         }
       }
+      previousFrameTimeRef.current = time;
       animationFrameRef.current = window.requestAnimationFrame(scroll);
     };
 
@@ -955,6 +967,7 @@ function StudentTestimonials() {
 
   const pause = () => {
     pausedRef.current = true;
+    previousFrameTimeRef.current = null;
   };
   const resume = () => {
     if (!draggingRef.current) pausedRef.current = false;
@@ -971,11 +984,17 @@ function StudentTestimonials() {
     if (!draggingRef.current || !viewportRef.current) return;
     viewportRef.current.scrollLeft =
       dragStartScrollRef.current - (event.clientX - dragStartXRef.current);
+    autoScrollPositionRef.current = viewportRef.current.scrollLeft;
   };
   const endDrag = () => {
     if (!draggingRef.current) return;
     draggingRef.current = false;
     resume();
+  };
+  const syncManualScroll = () => {
+    if (viewportRef.current && pausedRef.current) {
+      autoScrollPositionRef.current = viewportRef.current.scrollLeft;
+    }
   };
 
   return (
@@ -1009,6 +1028,7 @@ function StudentTestimonials() {
           onPointerCancel={endDrag}
           onTouchStart={pause}
           onTouchEnd={resume}
+          onScroll={syncManualScroll}
         >
           <div className="student-testimonials-track">
             {testimonials.map(({ name, imageId, quote }) => (

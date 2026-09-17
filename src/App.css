@@ -1242,11 +1242,11 @@ small {
 }
 
 .student-testimonials-card {
-    flex: 0 0 clamp(248px, 24vw, 320px);
+    flex: 0 0 clamp(208px, 24vw, 200px);
     overflow: hidden;
-    background: #fff;
-    border: 1px solid #d8e4e1;
-    border-radius: 12px;
+    
+    
+    border-radius: 20px;
     scroll-snap-align: start;
 }
 
@@ -1256,6 +1256,7 @@ small {
     aspect-ratio: 3 / 4;
     object-fit: cover;
     background: #dbe9e6;
+    border-radius: 40px 40px 0 0;
 }
 
 .student-testimonials-copy {
