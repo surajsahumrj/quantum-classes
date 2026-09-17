@@ -154,6 +154,7 @@ function Brand() {
     </Link>
   );
 }
+function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -2143,6 +2144,7 @@ function Enquiry() {
 function App() {
   return (
     <BrowserRouter>
+      <Analytics />
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
