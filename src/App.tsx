@@ -877,55 +877,73 @@ function StudentTestimonials() {
       name: "Aagya Singh",
       imageId: "1B-JFc1BCI5QzLsJ5sLZd6hVywDeRL3NB",
       quote:
-        "The lessons are easy to follow, and regular practice has made me feel much more confident.",
+        "I understand concepts much better now because the teachers explain everything step by step and never rush through difficult topics.",
     },
     {
       name: "Abhinav Gupta",
       imageId: "1BmbbVbKdD9FY-5uhB81NmtcIGvvIp4X3",
       quote:
-        "I like how every topic is explained clearly before we move on to more difficult questions.",
+        "What I like most is that I can ask questions freely. The teachers make sure I understand a topic before moving ahead.",
     },
     {
       name: "Aniket Gupta",
       imageId: "1w-CU2ozBTHlpoeTyEFvU_uPGjYOLKoEo",
       quote:
-        "The classes have helped me practise consistently and understand my subjects better.",
+        "Regular practice and tests have helped me become more consistent with my studies and more confident while solving questions.",
     },
     {
       name: "Pratyush Narayan",
       imageId: "1BlDh34i20WKNILoQDzzhFpNBZPujaHft",
       quote:
-        "Teachers make time for questions, which makes learning feel much more comfortable.",
+        "The teachers are approachable and supportive. Whenever I get stuck, they take the time to explain the concept again.",
+    },
+    {
+      name: "Priya Chaurasiya",
+      imageId: "1nIP03EiqP1MoX3FIfYQaPuJWhPgF4aHb",
+      quote:
+        "The notes and study material make revision much easier. I can quickly go back to important concepts whenever I need to.",
     },
     {
       name: "Priyanshu Singh",
       imageId: "1ybJWjvKxmNL1DT6sIUXguGYuhidMOTLP",
       quote:
-        "The lessons are easy to follow, and regular practice has made me feel much more confident.",
+        "The regular classes keep me focused on my studies, and practising questions every week has improved my confidence.",
     },
     {
       name: "Sanchita Yadav",
       imageId: "101fl0eR3vj9pTPXE755KijETk2svOk-3",
       quote:
-        "The notes and practice material help me revise in a more organised way.",
+        "I really like the learning environment here. The concepts are explained clearly and the regular practice keeps me on track.",
     },
     {
       name: "Shivam Yadav",
       imageId: "1UPpa4A98ocNuRvbb2eq-756H6H6cOwC1",
       quote:
-        "The regular tests help me see what I understand and what I need to work on.",
+        "The tests help me understand where I stand and show me which topics I need to practise more before exams.",
+    },
+    {
+      name: "Shivangi Chaurasiya",
+      imageId: "1Gk5ezJSUoWkp542DbrG02Y3pWHdHsTBa",
+      quote:
+        "The teachers are patient with questions and explain difficult topics in a way that makes them much easier to understand.",
+    },
+    {
+      name: "Shubhankar Singh",
+      imageId: "1yd5vv21mQ83fRv0Mn8KUxmRaukr48qWN",
+      quote:
+        "Having proper notes along with classroom practice makes studying more organised and helps me prepare for tests with confidence.",
     },
     {
       name: "Sonali Yadav",
       imageId: "1BuNvN2JNtNCF_w5EdpC-WYoTGAxzU-pj",
       quote:
-        "I feel encouraged to keep improving, one concept and one practice session at a time.",
+        "The teachers motivate me to keep improving instead of being afraid of difficult questions. That has made a real difference in my learning.",
     },
     {
       name: "Vaibhavi Pandey",
       imageId: "1DKF3Qr9Kj50EHfKFelB1ZzM04mBbTszC",
       quote:
-        "Quantum gives me a focused place to learn and build confidence in every subject.",
+        "Quantum Classes gives me a focused learning environment where I can clear my doubts, practise regularly, and keep improving.",
     },
   ];
   const viewportRef = useRef<HTMLDivElement>(null);
