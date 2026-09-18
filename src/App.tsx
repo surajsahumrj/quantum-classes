@@ -1505,18 +1505,61 @@ function Fees() {
 type StudyFile = { id: string; name: string; size: string };
 type StudyChapter = { id: string; name: string; files: StudyFile[] };
 type StudySubject = { id: string; name: string; chapters: StudyChapter[] };
-type StudyClass = { id: string; name: string; subjects: StudySubject[] };
+type StudyClass = {
+  id: string;
+  name: string;
+  classNumber?: number | null;
+  board?: string | null;
+  subjects: StudySubject[];
+};
 type StudySearchResult = StudyChapter & {
   className: string;
   subjectName: string;
 };
+
+type ClassFolderDisplay = {
+  classNumber: number | null;
+  board: string | null;
+};
+
+// Drive folder names remain the source of truth. This only derives presentation
+// metadata; selection continues to use the folder's unique Drive ID.
+const parseClassFolderName = (name: string): ClassFolderDisplay => {
+  const classNumber = name.match(/\bclass\s*(\d+)/i)?.[1];
+  const board = name.match(/\(([^)]+)\)/)?.[1]?.trim();
+
+  return {
+    classNumber: classNumber ? Number.parseInt(classNumber, 10) : null,
+    board: board || null,
+  };
+};
+
+const sortClassFolders = (items: StudyClass[]) =>
+  [...items].sort((a, b) => {
+    const aDisplay = parseClassFolderName(a.name);
+    const bDisplay = parseClassFolderName(b.name);
+
+    // Numbered class folders sort naturally first; variants of a class stay
+    // adjacent and are ordered by their Drive-provided board label.
+    if (aDisplay.classNumber !== null && bDisplay.classNumber !== null) {
+      const numberOrder = aDisplay.classNumber - bDisplay.classNumber;
+      if (numberOrder !== 0) return numberOrder;
+      return (aDisplay.board || "").localeCompare(bDisplay.board || "", undefined, {
+        numeric: true,
+        sensitivity: "base",
+      });
+    }
+    if (aDisplay.classNumber !== null) return -1;
+    if (bDisplay.classNumber !== null) return 1;
+    return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
+  });
 
 const normalizeSearchText = (value: string) =>
   value.toLowerCase().trim().replace(/\s+/g, " ");
 
 function StudyMaterial() {
   const [classes, setClasses] = useState<StudyClass[]>([]);
-  const [activeClass, setActiveClass] = useState("");
+  const [selectedClassFolderId, setSelectedClassFolderId] = useState("");
   const [activeSubject, setActiveSubject] = useState("");
   const [expandedChapter, setExpandedChapter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -1532,21 +1575,24 @@ function StudyMaterial() {
       })
       .then((data: { classes: StudyClass[] }) => {
         // Normalize the API response at ONE appropriate boundary
-        const normalizedClasses = (data.classes || []).map((c) => ({
-          ...c,
-          subjects: (c.subjects || []).map((s) => ({
-            ...s,
-            chapters: (s.chapters || []).map((ch) => ({
-              ...ch,
-              files: ch.files || [],
+        const normalizedClasses = sortClassFolders(
+          (data.classes || []).map((c) => ({
+            ...c,
+            ...parseClassFolderName(c.name),
+            subjects: (c.subjects || []).map((s) => ({
+              ...s,
+              chapters: (s.chapters || []).map((ch) => ({
+                ...ch,
+                files: ch.files || [],
+              })),
             })),
           })),
-        }));
+        );
 
         setClasses(normalizedClasses);
         const first = normalizedClasses[0];
         if (first) {
-          setActiveClass(first.id);
+          setSelectedClassFolderId(first.id);
           setActiveSubject(first.subjects[0]?.id || "");
         }
       })
@@ -1557,7 +1603,7 @@ function StudyMaterial() {
     return () => controller.abort();
   }, []);
 
-  const currentClass = classes.find((c) => c.id === activeClass);
+  const currentClass = classes.find((c) => c.id === selectedClassFolderId);
 
   const getSubjectIcon = (name: string) => {
     const n = name.toLowerCase();
@@ -1679,20 +1725,22 @@ function StudyMaterial() {
             <div className="sm-layout">
               <div className="sm-class-selector">
                 {classes.map((c) => {
-                  const match = c.name.match(/\d+/);
-                  const classNum = match ? match[0].padStart(2, "0") : "ALL";
+                  const classNum = c.classNumber
+                    ? String(c.classNumber).padStart(2, "0")
+                    : c.name;
                   return (
                     <button
                       key={c.id}
-                      className={`sm-class-pill ${activeClass === c.id ? "active" : ""}`}
+                      className={`sm-class-pill ${selectedClassFolderId === c.id ? "active" : ""}`}
                       onClick={() => {
-                        setActiveClass(c.id);
+                        setSelectedClassFolderId(c.id);
                         setActiveSubject(c.subjects[0]?.id || "");
                         setSearchQuery("");
                       }}
                     >
                       <strong>{classNum}</strong>
                       <span>CLASS</span>
+                      {c.board && <span className="sm-class-board">{c.board}</span>}
                     </button>
                   );
                 })}

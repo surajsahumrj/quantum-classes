@@ -3245,6 +3245,13 @@ footer {
     color: #888;
 }
 
+.sm-class-pill .sm-class-board {
+    color: var(--teal);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
 .sm-class-pill:hover {
     border-color: var(--teal);
     transform: translateY(-2px);
