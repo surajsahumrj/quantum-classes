@@ -892,6 +892,18 @@ function StudentTestimonials() {
         "Regular practice and tests have helped me become more consistent with my studies and more confident while solving questions.",
     },
     {
+      name: "Aradhya Tripathi",
+      imageId: "1mVqJRTYQb-4Nqm4XiMBRwrudctwd-7xC",
+      quote:
+        "The learning environment here is very supportive. I feel comfortable asking questions and getting help when I need it.",
+    },
+    {
+      name: "Kavya Yadav",
+      imageId: "1V4lhVr6GFhywoOz7TH379-QusIOqGQoN",
+      quote:
+        "The teachers are always available to help and provide guidance. I feel supported in my learning journey.",
+    },
+    {
       name: "Pratyush Narayan",
       imageId: "1BlDh34i20WKNILoQDzzhFpNBZPujaHft",
       quote:
@@ -1544,14 +1556,21 @@ const sortClassFolders = (items: StudyClass[]) =>
     if (aDisplay.classNumber !== null && bDisplay.classNumber !== null) {
       const numberOrder = aDisplay.classNumber - bDisplay.classNumber;
       if (numberOrder !== 0) return numberOrder;
-      return (aDisplay.board || "").localeCompare(bDisplay.board || "", undefined, {
-        numeric: true,
-        sensitivity: "base",
-      });
+      return (aDisplay.board || "").localeCompare(
+        bDisplay.board || "",
+        undefined,
+        {
+          numeric: true,
+          sensitivity: "base",
+        },
+      );
     }
     if (aDisplay.classNumber !== null) return -1;
     if (bDisplay.classNumber !== null) return 1;
-    return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
+    return a.name.localeCompare(b.name, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
   });
 
 const normalizeSearchText = (value: string) =>
@@ -1740,7 +1759,9 @@ function StudyMaterial() {
                     >
                       <strong>{classNum}</strong>
                       <span>CLASS</span>
-                      {c.board && <span className="sm-class-board">{c.board}</span>}
+                      {c.board && (
+                        <span className="sm-class-board">{c.board}</span>
+                      )}
                     </button>
                   );
                 })}
